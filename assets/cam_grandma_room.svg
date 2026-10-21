@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
+  <defs>
+    <!-- Warm Living Room Light -->
+    <radialGradient id="lampWarm" cx="78%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FEF08A" stop-opacity="0.5"/>
+      <stop offset="40%" stop-color="#F59E0B" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#1E1B4B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Gentle AI Mesh Grid -->
+    <pattern id="meshGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(168, 85, 247, 0.12)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- ROOM BACKGROUND -->
+  <rect width="640" height="360" fill="#18181B"/>
+
+  <!-- Living Room Wall & Floor -->
+  <rect x="0" y="0" width="640" height="210" fill="#27272A"/>
+  <!-- Baseboard & Hardwood Floor -->
+  <rect x="0" y="206" width="640" height="8" fill="#52525B"/>
+  <polygon points="0,214 640,214 640,360 0,360" fill="#3F3F46"/>
+  <!-- Floor Planks -->
+  <g stroke="#27272A" stroke-width="1" opacity="0.4">
+    <line x1="80" y1="214" x2="30" y2="360"/>
+    <line x1="200" y1="214" x2="160" y2="360"/>
+    <line x1="320" y1="214" x2="290" y2="360"/>
+    <line x1="440" y1="214" x2="420" y2="360"/>
+    <line x1="560" y1="214" x2="550" y2="360"/>
+  </g>
+
+  <!-- Area Rug -->
+  <ellipse cx="320" cy="290" rx="190" ry="55" fill="#713F12" opacity="0.7" stroke="#A16207" stroke-width="2"/>
+
+  <!-- Comfortable Living Room Sofa / Armchair -->
+  <!-- Sofa Base -->
+  <rect x="180" y="160" width="260" height="90" rx="16" fill="#4B5563" stroke="#374151" stroke-width="2"/>
+  <!-- Sofa Back Cushions -->
+  <rect x="195" y="125" width="110" height="55" rx="8" fill="#6B7280"/>
+  <rect x="315" y="125" width="110" height="55" rx="8" fill="#6B7280"/>
+  <!-- Throw Pillows -->
+  <rect x="190" y="150" width="30" height="30" rx="6" fill="#F59E0B" transform="rotate(-15 190 150)"/>
+  <rect x="400" y="150" width="30" height="30" rx="6" fill="#EC4899" transform="rotate(15 400 150)"/>
+
+  <!-- End Table & Floor Lamp -->
+  <rect x="470" y="180" width="45" height="65" rx="4" fill="#78350F"/>
+  <!-- Floor Lamp -->
+  <line x1="500" y1="60" x2="500" y2="180" stroke="#CA8A04" stroke-width="3"/>
+  <polygon points="480,100 520,100 512,65 488,65" fill="#FEF08A" stroke="#EAB308" stroke-width="1.5"/>
+  <!-- Lamp Light Glow -->
+  <circle cx="500" cy="90" r="150" fill="url(#lampWarm)"/>
+
+  <!-- Echo Show 10 on Side Table -->
+  <g transform="translate(110, 165)">
+    <rect x="0" y="15" width="35" height="45" rx="3" fill="#78350F"/>
+    <!-- Echo Show Screen -->
+    <rect x="-8" y="-5" width="46" height="30" rx="4" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+    <circle cx="15" cy="10" r="5" fill="#0284C7"/>
+    <text x="15" y="26" font-family="'Inter', sans-serif" font-size="5" fill="#38BDF8" text-anchor="middle">Echo Show 10</text>
+  </g>
+
+  <!-- AI SENSING MESH GRID OVER LIVING ROOM -->
+  <rect x="140" y="110" width="340" height="160" fill="url(#meshGrid)"/>
+
+  <!-- WELLNESS SENSING RETICLE (NO MOTION DETECTED) -->
+  <g transform="translate(260, 120)">
+    <rect x="0" y="0" width="120" height="110" rx="8" fill="rgba(245, 158, 11, 0.08)" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6 3"/>
+
+    <!-- Inactivity Pulse Indicator -->
+    <circle cx="60" cy="55" r="32" fill="none" stroke="#F59E0B" stroke-width="1" opacity="0.4"/>
+    <circle cx="60" cy="55" r="22" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <circle cx="60" cy="55" r="5" fill="#F59E0B"/>
+
+    <!-- Floating HUD Tag Badge -->
+    <g transform="translate(-15, -34)">
+      <rect x="0" y="0" width="150" height="26" rx="4" fill="rgba(69, 26, 3, 0.95)" stroke="#F59E0B" stroke-width="1.5"/>
+      <circle cx="12" cy="13" r="4" fill="#F59E0B"/>
+      <text x="22" y="11" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#FDE68A">WELLNESS CHECK ALERT</text>
+      <text x="22" y="21" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#FBBF24">Inactivity: 8.2h • Living Room</text>
+    </g>
+
+    <!-- Echo Check-in Status -->
+    <g transform="translate(10, 120)">
+      <rect x="0" y="0" width="100" height="18" rx="4" fill="#78350F" stroke="#F59E0B" stroke-width="1"/>
+      <text x="50" y="12" font-family="'Inter', sans-serif" font-size="8" font-weight="700" fill="#FEF08A" text-anchor="middle">📞 2-WAY DROP-IN</text>
+    </g>
+  </g>
+
+  <!-- RING HUD OVERLAY -->
+  <rect x="0" y="0" width="640" height="32" fill="linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,0,0,0))"/>
+  <g transform="translate(14, 10)">
+    <circle cx="7" cy="7" r="6" stroke="#00D2FF" stroke-width="1.8" fill="none"/>
+    <circle cx="7" cy="7" r="2.5" fill="#00D2FF"/>
+    <text x="18" y="11" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#FFFFFF">ring</text>
+    <text x="46" y="11" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#D1D5DB">Indoor Cam Pro • Grandma Meera Residence</text>
+  </g>
+
+  <g transform="translate(545, 10)">
+    <rect x="0" y="0" width="82" height="18" rx="4" fill="#B45309"/>
+    <text x="41" y="12" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">⚠️ ADVISORY</text>
+  </g>
+
+  <!-- Bottom Bar -->
+  <rect x="0" y="328" width="640" height="32" fill="linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0))"/>
+  <text x="14" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#FBBF24">2026-10-21 13:30:00 EDT • BEDROCK ELDER CARE ACTIVE</text>
+  <text x="626" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="#93C5FD" text-anchor="end">Echo Show 10 Connected • Privacy Shutter OPEN</text>
+</svg>

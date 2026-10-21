@@ -274,6 +274,8 @@
             </div>
           </div>
           <div class="banner-actions">
+            <button class="btn-pill" id="btn-banner-alert-family" style="background:var(--threat-critical);color:#fff;border-color:var(--threat-critical);">🚨 Alert Priya & Family</button>
+            <button class="btn-pill" id="btn-banner-view-clip" style="background:var(--accent);color:#fff;border-color:var(--accent);">🎥 Watch Clip</button>
             <a class="banner-link" id="btn-banner-details">View Details →</a>
             <button class="banner-dismiss" id="btn-banner-dismiss" aria-label="Dismiss banner">&times;</button>
           </div>
@@ -362,6 +364,8 @@
               <div class="ai-quick-actions">
                 <button class="btn-ai-action" id="btn-quick-lock">🔒 Lock Back Door</button>
                 <button class="btn-ai-secondary" id="btn-quick-siren">🚨 Siren (110dB)</button>
+                <button class="btn-ai-secondary" id="btn-hero-watch-clip" style="background:#0284c7;color:#fff;border-color:#0284c7;">🎥 Watch AI Video</button>
+                <button class="btn-ai-secondary" id="btn-hero-alert-family" style="background:rgba(239,68,68,0.2);color:#fca5a5;border-color:#ef4444;">🚨 Alert Priya</button>
               </div>
             </div>
           </section>
@@ -558,8 +562,9 @@
               <div><span>Curfew:</span> <span>8:00 PM</span></div>
             </div>
             <div class="member-actions-row">
-              <button class="btn-member-action" onclick="showToast('Front Doorbell snapshot requested for Aarav', 'info')">📷 Snapshot</button>
-              <button class="btn-member-action" onclick="showToast('Front Door deadbolt confirmed LOCKED', 'low')">🔒 Verify Lock</button>
+              <button class="btn-member-action" data-action="call-member" data-member="aarav" style="background:var(--accent);color:#fff;">📞 Call Echo</button>
+              <button class="btn-member-action" data-action="nudge-member" data-member="aarav">💬 Nudge</button>
+              <button class="btn-member-action" data-action="view-member-cam" data-cam="doorbell_front" data-scene="aarav_arrival">🎥 Arrival Clip</button>
             </div>
           </div>
 
@@ -579,33 +584,36 @@
               <div><span>Last Activity:</span> <span>1:30 PM Lunch Motion</span></div>
             </div>
             <div class="member-actions-row">
-              <button class="btn-member-action" style="background:var(--accent);color:#fff;" onclick="showToast('Calling Grandma Meera via Echo Show 15...', 'info')">📞 Call Echo</button>
-              <button class="btn-member-action" onclick="switchTab('cameras')">🎥 Room Cam</button>
+              <button class="btn-member-action" data-action="call-member" data-member="meera" style="background:var(--accent);color:#fff;">📞 Drop-In Call</button>
+              <button class="btn-member-action" data-action="alert-member" data-member="meera" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;">🚨 Alert Family</button>
+              <button class="btn-member-action" data-action="view-member-cam" data-cam="cam_grandma_living" data-scene="grandma_wellness">🎥 Room Cam</button>
             </div>
           </div>
 
           <!-- Member 3: Priya -->
-          <div class="family-member-card-lg">
+          <div class="family-member-card-lg" id="fam-view-priya">
             <div class="member-top">
               <div class="member-avatar-lg">👩</div>
               <div class="member-title-block">
                 <h3>Priya Reddy</h3>
-                <span>Parent • Age 38</span>
+                <span>Parent • Age 38 • Working Away</span>
               </div>
             </div>
             <div class="member-details-list">
-              <div><span>Status:</span> <strong style="color:var(--threat-low)">Active (Working Remotely)</strong></div>
+              <div><span>Status:</span> <strong style="color:var(--threat-low)">Active (Working at Office)</strong></div>
               <div><span>Role:</span> <span>Primary Account Admin</span></div>
               <div><span>App Status:</span> <span>Connected (iPhone 14)</span></div>
-              <div><span>Location:</span> <span>Home Office Safe Zone</span></div>
+              <div><span>Location:</span> <span>Office Safe Zone (4.8 mi)</span></div>
             </div>
             <div class="member-actions-row">
-              <button class="btn-member-action" onclick="showToast('Priya account settings synchronized', 'info')">⚙️ Preferences</button>
+              <button class="btn-member-action" data-action="call-member" data-member="priya" style="background:var(--accent);color:#fff;">📞 Call Priya</button>
+              <button class="btn-member-action" data-action="alert-member" data-member="priya" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid #ef4444;">🚨 Alert Priya</button>
+              <button class="btn-member-action" onclick="showToast('Priya security preferences synced', 'info')">⚙️ Preferences</button>
             </div>
           </div>
 
           <!-- Member 4: Anita -->
-          <div class="family-member-card-lg">
+          <div class="family-member-card-lg" id="fam-view-anita">
             <div class="member-top">
               <div class="member-avatar-lg">👩‍💼</div>
               <div class="member-title-block">
@@ -620,7 +628,9 @@
               <div><span>Access:</span> <span>Front Porch & Living Room</span></div>
             </div>
             <div class="member-actions-row">
-              <button class="btn-member-action" onclick="showToast('Caregiver schedule verified', 'info')">📋 Schedule</button>
+              <button class="btn-member-action" data-action="call-member" data-member="anita" style="background:var(--accent);color:#fff;">📞 Call Caregiver</button>
+              <button class="btn-member-action" data-action="nudge-member" data-member="anita">💬 Shift Notice</button>
+              <button class="btn-member-action" onclick="showToast('Caregiver schedule verified for weekend', 'info')">📋 Schedule</button>
             </div>
           </div>
         </div>
@@ -662,68 +672,72 @@
 
         <div class="cameras-view-grid">
           <!-- Camera 1: Front Doorbell -->
-          <div class="camera-feed-card">
+          <div class="camera-feed-card" id="cam-card-doorbell">
             <div class="camera-card-top">
               <strong>Front Doorbell Pro 2</strong>
               <span class="cam-badge live">LIVE HD</span>
             </div>
-            <div class="camera-viewport-large front-door">
+            <div class="camera-viewport-large front-door" id="cam-box-front" data-cam="doorbell_front" title="Click to Watch Live HD Stream & 2-Way Audio">
               <span class="cam-feed-label">FRONT ENTRANCE • DEADBOLT LOCKED</span>
               <span class="cam-telemetry-badge">🔋 94% • Wi-Fi -52dBm</span>
             </div>
             <div class="camera-controls-bar">
-              <button class="btn-cam-ctrl" onclick="showToast('Two-way audio intercom opened on Front Doorbell', 'info')">🎙️ Talk</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Deadbolt unlocked temporarily', 'medium')">🔓 Unlock</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Chime triggered on doorbell', 'info')">🔔 Chime</button>
+              <button class="btn-cam-ctrl" data-cam-action="talk" data-cam="doorbell_front">🎙️ Talk</button>
+              <button class="btn-cam-ctrl" data-cam-action="doorbell-ring" data-cam="doorbell_front" style="color:#00D2FF;font-weight:700;">🔔 Ring Chime</button>
+              <button class="btn-cam-ctrl" data-cam-action="stream" data-cam="doorbell_front">🎥 Live Stream</button>
+              <button class="btn-cam-ctrl" data-cam-action="unlock">🔓 Unlock</button>
             </div>
           </div>
 
           <!-- Camera 2: Backyard Floodlight -->
-          <div class="camera-feed-card threat-active">
+          <div class="camera-feed-card threat-active" id="cam-card-backyard">
             <div class="camera-card-top">
               <strong style="color:var(--threat-critical)">Backyard Floodlight Cam Wired</strong>
               <span class="cam-badge danger">THREAT ACTIVE</span>
             </div>
-            <div class="camera-viewport-large backyard">
+            <div class="camera-viewport-large backyard" id="cam-box-backyard" data-cam="cam_backyard" title="Click to Watch Live HD Stream">
               <span class="cam-feed-label">BACK PERIMETER • UNKNOWN PERSON DETECTED</span>
               <span class="cam-telemetry-badge" style="color:#fbbf24;border:1px solid #fbbf24;">💡 Floodlight ON</span>
             </div>
             <div class="camera-controls-bar">
-              <button class="btn-cam-ctrl" style="background:var(--threat-critical);color:#fff;" onclick="playAudioCue('critical'); showToast('110dB Siren sounding on Backyard Floodlight!', 'critical')">🚨 Siren 110dB</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Floodlight brightness set to 100%', 'info')">💡 Light Toggle</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Saving 60-second forensic HD clip', 'low')">💾 Save Clip</button>
+              <button class="btn-cam-ctrl" data-cam-action="siren" style="background:var(--threat-critical);color:#fff;">🚨 Siren 110dB</button>
+              <button class="btn-cam-ctrl" data-cam-action="stream" data-cam="cam_backyard">🎥 Live Stream</button>
+              <button class="btn-cam-ctrl" data-cam-action="light">💡 Light 100%</button>
+              <button class="btn-cam-ctrl" data-cam-action="clip">💾 Save Clip</button>
             </div>
           </div>
 
           <!-- Camera 3: Driveway Spotlight -->
-          <div class="camera-feed-card">
+          <div class="camera-feed-card" id="cam-card-driveway">
             <div class="camera-card-top">
               <strong>Driveway Spotlight Cam Plus</strong>
               <span class="cam-badge live">SECURE</span>
             </div>
-            <div class="camera-viewport-large driveway">
+            <div class="camera-viewport-large driveway" id="cam-box-driveway" data-cam="cam_driveway" title="Click to Watch Live HD Stream">
               <span class="cam-feed-label">DRIVEWAY & GARAGE • VEHICLE ZONE</span>
               <span class="cam-telemetry-badge">🔋 88%</span>
             </div>
             <div class="camera-controls-bar">
-              <button class="btn-cam-ctrl" onclick="showToast('Spotlight activated', 'info')">💡 Spotlight</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Garage door sensor verified CLOSED', 'low')">🚪 Garage Status</button>
+              <button class="btn-cam-ctrl" data-cam-action="stream" data-cam="cam_driveway">🎥 Live Stream</button>
+              <button class="btn-cam-ctrl" data-cam-action="spotlight">💡 Spotlight</button>
+              <button class="btn-cam-ctrl" data-cam-action="garage">🚪 Garage Status</button>
             </div>
           </div>
 
           <!-- Camera 4: Grandma's Living Room -->
-          <div class="camera-feed-card">
+          <div class="camera-feed-card" id="cam-card-grandma">
             <div class="camera-card-top">
               <strong style="color:var(--threat-medium)">Grandma's Living Room Cam</strong>
               <span class="cam-badge wellness">WELLNESS CHECK</span>
             </div>
-            <div class="camera-viewport-large grandma-room">
+            <div class="camera-viewport-large grandma-room" id="cam-box-grandma" data-cam="cam_grandma_living" title="Click to Watch Live HD Stream & Drop-In">
               <span class="cam-feed-label">MEERA RESIDENCE • NO MOTION FOR 8.2 HOURS</span>
               <span class="cam-telemetry-badge">🔌 Wired Power</span>
             </div>
             <div class="camera-controls-bar">
-              <button class="btn-cam-ctrl" style="background:var(--accent);color:#fff;" onclick="showToast('Opening two-way voice check-in with Grandma Meera', 'info')">📞 Two-Way Call</button>
-              <button class="btn-cam-ctrl" onclick="showToast('Privacy shutter closed', 'info')">🛡️ Privacy Mode</button>
+              <button class="btn-cam-ctrl" data-cam-action="talk" data-cam="cam_grandma_living" style="background:var(--accent);color:#fff;">📞 2-Way Drop-In</button>
+              <button class="btn-cam-ctrl" data-cam-action="alert-dispatch" data-member="meera">🚨 Alert Family</button>
+              <button class="btn-cam-ctrl" data-cam-action="stream" data-cam="cam_grandma_living">🎥 Live Stream</button>
             </div>
           </div>
         </div>
@@ -1154,6 +1168,196 @@
 
       <div class="auth-modal-footer">
         <span>🔒 256-Bit TLS • AWS Cognito User Pool • Ring Event API 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 1: HIGH-DEFINITION AI CAMERA STREAM & TIMELINE VIDEO PLAYER
+       ========================================================================= -->
+  <div id="modal-video-player" class="video-player-modal" hidden role="dialog" aria-modal="true" aria-labelledby="video-player-heading">
+    <div class="video-player-card">
+      <!-- Player Header -->
+      <div class="video-player-header">
+        <div class="video-player-title">
+          <span style="font-size:16px;">📹</span>
+          <span id="video-player-heading">Front Doorbell Pro 2 — AI Vision Stream</span>
+          <span class="threat-badge critical" id="video-player-badge">LIVE 1080p HDR</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <select id="video-cam-select" class="lang-select-top" aria-label="Switch Camera">
+            <option value="doorbell_front" selected>Front Doorbell Pro 2</option>
+            <option value="cam_backyard">Backyard Floodlight Cam</option>
+            <option value="cam_driveway">Driveway Spotlight Cam</option>
+            <option value="cam_grandma_living">Grandma's Living Room Cam</option>
+          </select>
+          <button class="auth-close-btn" id="btn-close-video" type="button" aria-label="Close Video Player">✕</button>
+        </div>
+      </div>
+
+      <!-- Main Video Screen with HUD -->
+      <div class="video-player-screen" id="video-screen-container">
+        <img src="assets/cam_front_door_night.svg" alt="Camera Feed Viewport" class="video-player-img" id="video-player-feed-img">
+
+        <!-- Top Right Overlays (Night Vision, AI HUD, Zoom) -->
+        <div class="video-overlay-ctrls">
+          <button type="button" class="video-hud-btn active" id="btn-hud-ai" title="Toggle AI Bounding Box HUD">✦ AI HUD</button>
+          <button type="button" class="video-hud-btn" id="btn-hud-night" title="Toggle IR Night Vision Filter">🌙 Night IR</button>
+          <button type="button" class="video-hud-btn" id="btn-hud-zoom" title="Cycle Digital Zoom">🔍 1.0x</button>
+        </div>
+
+        <!-- Doorbell Ring Trigger Button (When Front Doorbell is active) -->
+        <button type="button" class="video-doorbell-ring-btn" id="btn-player-ring-doorbell" title="Press Doorbell to Ring Real Chime">
+          <span>🔔</span> <span>Press Doorbell Chime</span>
+        </button>
+      </div>
+
+      <!-- Timeline Scrubber Bar -->
+      <div class="video-timeline-bar">
+        <div class="timeline-event-markers">
+          <span class="pill-label">⚡ Event History Scrubber:</span>
+          <button type="button" class="timeline-marker-chip critical active" data-time="23:47" data-scene="night_visitor">🔴 11:47 PM • Unknown Male</button>
+          <button type="button" class="timeline-marker-chip" data-time="15:15" data-scene="aarav_arrival">🟢 3:15 PM • Aarav Arrived</button>
+          <button type="button" class="timeline-marker-chip" data-time="13:30" data-scene="grandma_wellness">🟡 1:30 PM • Elder Check</button>
+          <button type="button" class="timeline-marker-chip" data-time="11:20" data-scene="package">📦 11:20 AM • Package</button>
+        </div>
+
+        <div class="video-timeline-track-wrap">
+          <input type="range" class="video-scrubber-slider" id="video-scrubber" min="0" max="100" value="85" aria-label="Video Timeline Scrubber">
+        </div>
+
+        <div class="video-controls-row">
+          <div class="video-ctrl-btns-left">
+            <button type="button" class="video-play-btn" id="btn-video-play" aria-label="Play / Pause">⏸</button>
+            <span class="video-time-display" id="video-clock-display">2026-10-21 23:47:19 EDT • 30.0 FPS</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn-pill" id="btn-player-intercom">🎙️ 2-Way Talk</button>
+            <button type="button" class="btn-pill" id="btn-player-snapshot">📸 HD Snapshot</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forensic AI Analysis Panel -->
+      <div class="video-forensic-panel">
+        <div class="forensic-text-col">
+          <strong id="forensic-title" style="color:#FCA5A5;font-size:12px;">✦ Bedrock AI Forensic Analysis: Unknown Person Loitering</strong>
+          <p id="forensic-desc">3rd visit in 5 days. Rekognition Face Match: 0%. Claude 3 Haiku Assessment: Reconnaissance loitering (duration 42s). Recommended: Smart Deadbolt lock + 110dB floodlight siren.</p>
+        </div>
+        <div class="forensic-actions-col">
+          <button type="button" class="btn-ai-action" id="btn-forensic-alert" style="background:#EF4444;color:#fff;">🚨 Alert Priya</button>
+          <button type="button" class="btn-ai-secondary" id="btn-forensic-lock">🔒 Lock Door</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: TWO-WAY AUDIO INTERCOM & FAMILY CALLING
+       ========================================================================= -->
+  <div id="modal-intercom" class="intercom-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intercom-heading">
+    <div class="intercom-card">
+      <button class="auth-close-btn" id="btn-close-intercom" type="button" aria-label="End or Close Call">✕</button>
+
+      <!-- Callee Avatar & Pulsing Voice Ring -->
+      <div class="intercom-avatar-wrap">
+        <div class="intercom-avatar-pulse"></div>
+        <div class="intercom-avatar" id="intercom-avatar-icon">👩</div>
+      </div>
+
+      <h3 class="intercom-callee-name" id="intercom-heading">Calling Priya Reddy</h3>
+      <p class="intercom-device-info" id="intercom-device-desc">iPhone 14 Pro • Low-Latency Ring WebRTC VoIP Stream</p>
+
+      <div class="intercom-status-pill ringing" id="intercom-status-badge">
+        <span class="ai-pulse-dot"></span>
+        <span id="intercom-status-text">Ringing...</span>
+      </div>
+
+      <!-- Audio Frequency Waveform Visualizer -->
+      <div class="intercom-waveform-box">
+        <canvas id="intercom-wave-canvas" width="400" height="50"></canvas>
+      </div>
+
+      <!-- Quick Canned Voice Responses / Whisper Nudges -->
+      <div class="intercom-canned-header">⚡ Instant Alexa Voice Nudges:</div>
+      <div class="intercom-canned-chips" id="intercom-canned-chips">
+        <button type="button" class="canned-chip-btn" data-say="Can I help you? SafeGuard security is recording.">"Can I help you?"</button>
+        <button type="button" class="canned-chip-btn" data-say="Please leave the package by the front door.">"Leave package by door"</button>
+        <button type="button" class="canned-chip-btn" data-say="Aarav, make sure the front deadbolt is locked.">"Check front lock"</button>
+        <button type="button" class="canned-chip-btn" data-say="Checking in, please let us know if you are okay.">"Are you okay?"</button>
+      </div>
+
+      <!-- Call Controls Row -->
+      <div class="intercom-controls-row">
+        <button type="button" class="btn-call-action" id="btn-call-mute" title="Mute Microphone">🎙️</button>
+        <button type="button" class="btn-call-action" id="btn-call-speaker" title="Speaker Boost">🔊</button>
+        <button type="button" class="btn-call-action" id="btn-call-video" title="Video Stream">📹</button>
+        <button type="button" class="btn-call-action end-call" id="btn-call-hangup" title="End Call">🔴</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: EMERGENCY ALERT & WORKING MEMBER DISPATCHER
+       ========================================================================= -->
+  <div id="modal-alert-dispatch" class="alert-dispatch-modal" hidden role="dialog" aria-modal="true" aria-labelledby="dispatch-heading">
+    <div class="alert-dispatch-card">
+      <button class="auth-close-btn" id="btn-close-dispatch" type="button" aria-label="Close Dispatch Console">✕</button>
+
+      <div class="dispatch-header">
+        <h2 id="dispatch-heading">🚨 Emergency & Family Alert Dispatch</h2>
+        <p>Broadcast high-priority incident alerts via AWS SNS SMS, iOS Push, and Alexa Household Drop-In</p>
+      </div>
+
+      <div class="dispatch-recipients-list">
+        <label class="dispatch-recipient-row">
+          <input type="checkbox" id="chk-recip-priya" checked>
+          <div class="dispatch-recip-meta">
+            <strong>👩 Priya Reddy (Primary Admin • Working Away)</strong>
+            <span>SMS to +1-555-0199 • High-Priority APNs Push with snapshot</span>
+          </div>
+        </label>
+
+        <label class="dispatch-recipient-row">
+          <input type="checkbox" id="chk-recip-echo" checked>
+          <div class="dispatch-recip-meta">
+            <strong>📢 Household Echo Devices (3 Connected)</strong>
+            <span>Alexa Guard chime + Voice announcement: "Urgent security alert"</span>
+          </div>
+        </label>
+
+        <label class="dispatch-recipient-row">
+          <input type="checkbox" id="chk-recip-aarav" checked>
+          <div class="dispatch-recip-meta">
+            <strong>👦 Aarav (Kids Room Echo Dot)</strong>
+            <span>Gentle Safe-Room chime & smart deadbolt lock confirmation</span>
+          </div>
+        </label>
+
+        <label class="dispatch-recipient-row">
+          <input type="checkbox" id="chk-recip-meera">
+          <div class="dispatch-recip-meta">
+            <strong>👵 Grandma Meera (Living Room Echo Show 10)</strong>
+            <span>Quiet screen notification (No loud sirens to prevent alarm)</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="dispatch-msg-box">
+        <label for="input-dispatch-msg">Incident Alert Message (AWS SNS Template):</label>
+        <textarea id="input-dispatch-msg" class="dispatch-msg-input" rows="3">URGENT SafeGuard Alert: Unknown individual identified at Front Door (11:47 PM, 3rd visit). Rekognition match: 0%. Threat Level: HIGH. Smart deadbolts locked. View live video clip.</textarea>
+      </div>
+
+      <button type="button" class="btn-dispatch-submit" id="btn-trigger-dispatch">
+        <span>⚡ Send Instant Alert Dispatch</span>
+      </button>
+
+      <!-- Real-time Delivery Console -->
+      <div class="dispatch-telemetry-console" id="dispatch-console">
+        <div>[00:00:01] ⚡ AWS SNS Client initializing region us-east-1...</div>
+        <div>[00:00:02] ✓ SMS dispatched to Priya (+1-555-0199) • Latency: 118ms</div>
+        <div>[00:00:03] ✓ Alexa Guard Announcement queued to 3 Echo endpoints</div>
+        <div>[00:00:04] ✓ Forensic video clip snapshot attached & signed with CloudFront URL</div>
       </div>
     </div>
   </div>

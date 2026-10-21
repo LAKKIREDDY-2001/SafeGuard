@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
+  <defs>
+    <!-- Spotlight Cones -->
+    <radialGradient id="spotlightCone" cx="50%" cy="10%" r="80%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#93c5fd" stop-opacity="0.3"/>
+      <stop offset="80%" stop-color="#1e3a8a" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- BACKGROUND: NIGHT DRIVEWAY -->
+  <rect width="640" height="360" fill="#020617"/>
+
+  <!-- House Wall & Garage Doors -->
+  <rect x="0" y="0" width="640" height="180" fill="#0F172A"/>
+  <!-- 2 Double Garage Doors -->
+  <rect x="60" y="50" width="230" height="130" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+  <rect x="350" y="50" width="230" height="130" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+  <!-- Garage Panel Grooves -->
+  <g stroke="#0F172A" stroke-width="1.5">
+    <line x1="60" y1="80" x2="290" y2="80"/>
+    <line x1="60" y1="110" x2="290" y2="110"/>
+    <line x1="60" y1="140" x2="290" y2="140"/>
+    <line x1="350" y1="80" x2="580" y2="80"/>
+    <line x1="350" y1="110" x2="580" y2="110"/>
+    <line x1="350" y1="140" x2="580" y2="140"/>
+  </g>
+
+  <!-- Asphalt Driveway -->
+  <polygon points="0,180 640,180 640,360 0,360" fill="#1E293B"/>
+  <polygon points="120,180 520,180 620,360 20,360" fill="#334155"/>
+
+  <!-- Spotlight Cone -->
+  <polygon points="320,0 100,360 540,360" fill="url(#spotlightCone)"/>
+
+  <!-- DELIVERY VAN VEHICLE SILHOUETTE (TURNING AROUND) -->
+  <g transform="translate(240, 200)">
+    <!-- Van Shadow -->
+    <ellipse cx="80" cy="90" rx="95" ry="18" fill="#000000" opacity="0.6"/>
+
+    <!-- Van Body -->
+    <path d="M10 70 L15 30 L45 15 L145 15 L155 70 Z" fill="#0F172A" stroke="#38BDF8" stroke-width="1"/>
+    <!-- Windshield -->
+    <polygon points="20,60 24,35 45,22 45,60" fill="#0284C7" opacity="0.4"/>
+    <!-- Headlights Beam on Asphalt -->
+    <polygon points="10,65 -60,85 -50,110 10,75" fill="#FEF08A" opacity="0.4"/>
+    <!-- Wheels -->
+    <circle cx="35" cy="72" r="14" fill="#000000" stroke="#475569" stroke-width="3"/>
+    <circle cx="130" cy="72" r="14" fill="#000000" stroke="#475569" stroke-width="3"/>
+  </g>
+
+  <!-- AI VEHICLE DETECTION BOUNDING BOX -->
+  <g transform="translate(230, 195)">
+    <rect x="0" y="0" width="180" height="95" fill="rgba(56, 189, 248, 0.08)" stroke="#38BDF8" stroke-width="2" stroke-dasharray="6 3"/>
+    <path d="M -3 12 L -3 -3 L 12 -3" stroke="#38BDF8" stroke-width="3" fill="none"/>
+    <path d="M 168 -3 L 183 -3 L 183 12" stroke="#38BDF8" stroke-width="3" fill="none"/>
+    <path d="M -3 83 L -3 98 L 12 98" stroke="#38BDF8" stroke-width="3" fill="none"/>
+    <path d="M 168 98 L 183 98 L 183 83" stroke="#38BDF8" stroke-width="3" fill="none"/>
+
+    <!-- Floating HUD Tag Badge -->
+    <g transform="translate(10, -30)">
+      <rect x="0" y="0" width="160" height="24" rx="4" fill="rgba(12, 74, 110, 0.95)" stroke="#38BDF8" stroke-width="1.5"/>
+      <circle cx="10" cy="12" r="4" fill="#38BDF8"/>
+      <text x="20" y="10" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#BAE6FD">VEHICLE TURNAROUND</text>
+      <text x="20" y="19" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#7DD3FC">Delivery Van • Zero Breach</text>
+    </g>
+  </g>
+
+  <!-- RING HUD OVERLAY -->
+  <rect x="0" y="0" width="640" height="32" fill="linear-gradient(180deg, rgba(0,0,0,0.8), rgba(0,0,0,0))"/>
+  <g transform="translate(14, 10)">
+    <circle cx="7" cy="7" r="6" stroke="#00D2FF" stroke-width="1.8" fill="none"/>
+    <circle cx="7" cy="7" r="2.5" fill="#00D2FF"/>
+    <text x="18" y="11" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#FFFFFF">ring</text>
+    <text x="46" y="11" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#CBD5E1">Spotlight Cam Plus • Driveway & Garage Zone</text>
+  </g>
+
+  <g transform="translate(565, 12)">
+    <circle cx="6" cy="5" r="4.5" fill="#10B981"/>
+    <text x="16" y="9" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="700" fill="#FFFFFF">LIVE</text>
+  </g>
+
+  <!-- Bottom Bar -->
+  <rect x="0" y="328" width="640" height="32" fill="linear-gradient(0deg, rgba(0,0,0,0.8), rgba(0,0,0,0))"/>
+  <text x="14" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#CBD5E1">2026-10-21 02:14:11 EDT • SPOTLIGHT ILLUMINATION ACTIVE</text>
+  <text x="626" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="#60A5FA" text-anchor="end">Garage Door: VERIFIED CLOSED</text>
+</svg>
