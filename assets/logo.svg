@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60" fill="none">
+  <defs>
+    <!-- Cyan to Electric Blue Gradient -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00D2FF"/>
+      <stop offset="50%" stop-color="#0080FF"/>
+      <stop offset="100%" stop-color="#0040C8"/>
+    </linearGradient>
+
+    <!-- Metallic Shield Fill -->
+    <linearGradient id="shieldBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0B132B"/>
+    </linearGradient>
+
+    <!-- Ring Glow -->
+    <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00D2FF" stop-opacity="0.8"/>
+      <stop offset="60%" stop-color="#0080FF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0080FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- SHIELD EMBLEM -->
+  <g transform="translate(6, 6)">
+    <!-- Outer Shield Shadow / Glow -->
+    <path d="M24 2 L42 8 C42 26 34 38 24 46 C14 38 6 26 6 8 Z" fill="url(#ringGlow)" filter="blur(3px)" opacity="0.6"/>
+
+    <!-- Main Shield -->
+    <path d="M24 4 L42 10 C42 27 34 39 24 46 C14 39 6 27 6 10 Z" fill="url(#shieldBg)" stroke="url(#shieldGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+
+    <!-- Ring Optical Aperture (Ring Camera Lens) -->
+    <circle cx="24" cy="22" r="11" stroke="#00D2FF" stroke-width="2" fill="#0A0E1A"/>
+    <circle cx="24" cy="22" r="7.5" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="3 2" fill="#0D1527"/>
+
+    <!-- AI Neural Core Spark / Diamond -->
+    <circle cx="24" cy="22" r="3.5" fill="#00D2FF"/>
+    <circle cx="24" cy="22" r="1.5" fill="#FFFFFF"/>
+
+    <!-- Scanning Radar Sweep Arc -->
+    <path d="M24 11 A 11 11 0 0 1 35 22" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- TYPOGRAPHY -->
+  <g transform="translate(62, 38)">
+    <text font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="800" fill="#F1F5F9" letter-spacing="-0.5">Safe<tspan fill="url(#shieldGrad)">Guard</tspan></text>
+  </g>
+
+  <!-- SUBTITLE / BADGE -->
+  <g transform="translate(64, 49)">
+    <text font-family="'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="600" fill="#64748B" letter-spacing="1.2">RING AI SECURITY</text>
+  </g>
+</svg>
