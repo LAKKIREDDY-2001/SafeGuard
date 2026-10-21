@@ -1,21 +1,17 @@
 /**
  * SafeGuard — AI-Powered Ring Security Intelligence Platform
- * Complete Dashboard Controller: Desktop Sidebar + Mobile Bottom Nav + Live Simulator
+ * True View Navigation Controller: Dashboard, Patterns, Family, Cameras, Alexa, Reports, Settings
  */
 
 // Application State
 const state = {
+  activeTab: 'dashboard',
   currentLang: 'en',
   activeFilter: 'all',
   activeCamera: 'all',
   soundEnabled: true,
   hapticEnabled: true,
   nightMode: true,
-  activeThreat: {
-    level: 'medium',
-    title: 'MEDIUM THREAT ACTIVE — Front Door (11:47 PM)',
-    desc: 'Unknown individual, 3rd visit this week. Rekognition: 0% match to family profiles.'
-  },
   events: [
     {
       id: "evt_101",
@@ -65,10 +61,10 @@ const state = {
   ]
 };
 
-// 5-Language Dictionary
+// 5-Language Localization Dictionary
 const i18n = {
   en: {
-    aiThreatHigh: "Unknown male, 3rd visit this week, 11:47 PM. No matching family profile. Pattern suggests reconnaissance behavior. Recommended action: Lock back door, enable floodlight, notify emergency contact.",
+    aiThreatHigh: "Unknown male, 3rd visit this week, 11:47 PM. No matching family profile. Cross-referenced with neighborhood correlation: Pattern suggests reconnaissance behavior.",
     aiActionDefault: "Lock exterior doors, activate floodlight, and alert emergency contacts.",
     alexaWhosAtDoor: "At your front door, SafeGuard Bedrock AI identified an unknown individual. This is his 3rd visit this week, all after 10 PM. Threat level is HIGH. I have turned on your front floodlight, saved a video clip, and sent a push alert to Priya's phone.",
     alexaFamilySafe: "Here is your family safety status: Aarav arrived safely home from school at 3:15 PM, and the front door deadbolt is locked. Priya is active. Notice: Grandma Meera has had no motion detected for 8 hours. SafeGuard has triggered a gentle wellness check alert.",
@@ -114,7 +110,7 @@ const i18n = {
   }
 };
 
-// Web Audio API Synthesized Chimes
+// Web Audio API Synthesizer
 const audioCtx = (typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext))
   ? new (window.AudioContext || window.webkitAudioContext)()
   : null;
@@ -191,7 +187,56 @@ function showToast(message, type = 'info') {
   }, 4500);
 }
 
-// Render Live Event Feed
+// =========================================================================
+// VIEW / TAB SEPARATION LOGIC
+// =========================================================================
+function switchTab(tabName) {
+  state.activeTab = tabName;
+
+  // 1. Update Desktop Sidebar
+  document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+    if (item.dataset.tab === tabName) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
+  // 2. Update Mobile Bottom Nav
+  document.querySelectorAll('.bottom-nav .nav-tab').forEach(tab => {
+    if (tab.dataset.tab === tabName) {
+      tab.classList.add('active');
+    } else {
+      tab.classList.remove('active');
+    }
+  });
+
+  // 3. Switch View Pane Visibility
+  document.querySelectorAll('.view-pane').forEach(pane => {
+    pane.classList.remove('active');
+  });
+
+  const activePane = document.getElementById(`view-${tabName}`);
+  if (activePane) {
+    activePane.classList.add('active');
+  }
+
+  // 4. Reset scroll on main container
+  const main = document.getElementById('main-content');
+  if (main) {
+    main.scrollTop = 0;
+  }
+
+  // 5. Trigger secondary renders if needed
+  if (tabName === 'patterns') {
+    renderPatternChart();
+  }
+
+  showToast(`Switched to ${tabName.toUpperCase()} space`, 'info');
+}
+window.switchTab = switchTab; // Ensure globally accessible
+
+// Render Live Event Feed in Dashboard
 function renderEvents() {
   const feed = document.getElementById('live-event-feed');
   if (!feed) return;
@@ -227,27 +272,27 @@ function renderEvents() {
   });
 }
 
-// Render 7-Day Pattern Histogram
+// Render Pattern Histogram in Patterns Space
 function renderPatternChart() {
-  const container = document.getElementById('pattern-bars-container');
+  const container = document.getElementById('pattern-bars-large');
   if (!container) return;
 
   container.innerHTML = '';
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const values = [18, 22, 14, 26, 32, 45, 12]; // Sat had late night anomaly
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat (Peak)', 'Sun'];
+  const values = [18, 22, 14, 26, 32, 58, 16]; // Saturday night intruder spike
 
   values.forEach((val, idx) => {
     const col = document.createElement('div');
-    col.className = 'mini-bar-col';
+    col.className = 'h-col';
 
     const bar = document.createElement('div');
-    bar.className = 'mini-bar';
+    bar.className = 'h-bar';
     if (idx === 5) bar.classList.add('anomaly'); // Saturday anomaly
-    const pct = Math.min(100, Math.max(15, (val / 45) * 100));
+    const pct = Math.min(100, Math.max(12, (val / 58) * 100));
     bar.style.height = `${pct}%`;
 
     const label = document.createElement('span');
-    label.className = 'mini-bar-day';
+    label.className = 'h-day';
     label.textContent = days[idx];
 
     col.appendChild(bar);
@@ -256,7 +301,7 @@ function renderPatternChart() {
   });
 }
 
-// Alexa Voice Intent Execution
+// Alexa Intent Execution
 function executeAlexaIntent(intentKey) {
   const t = i18n[state.currentLang] || i18n.en;
   let speech = "";
@@ -266,19 +311,19 @@ function executeAlexaIntent(intentKey) {
   if (intentKey === 'whos_at_door') {
     speech = t.alexaWhosAtDoor;
     cardTitle = "Visitor Alert: Unknown Male (Threat: HIGH)";
-    cardText = "Bedrock Claude 3 Haiku: 3rd visit this week at 11:47 PM. Rekognition: 0% match to family profiles.\nAction: Floodlight turned on, video clip saved.";
+    cardText = "Bedrock Claude 3 Haiku: 3rd visit this week at 11:47 PM. Rekognition: 0% match to family profiles.\nAction: Floodlight turned on, video clip saved, phone push alert dispatched.";
     playAudioCue('critical');
     triggerHaptic(300);
   } else if (intentKey === 'is_family_safe') {
     speech = t.alexaFamilySafe;
     cardTitle = "Family Safety Status";
-    cardText = "• Aarav (10): Safe at Home (Deadbolt Locked)\n• Priya (38): Working Remotely\n• Grandma Meera (75): Wellness Check Alert (8h no motion)";
+    cardText = "• Aarav (10): Safe at Home (Deadbolt Locked)\n• Priya (38): Working Remotely\n• Grandma Meera (75): Wellness Check Alert (8h no motion in living room)";
     playAudioCue('medium');
     triggerHaptic(150);
   } else if (intentKey === 'what_happened_last_night') {
     speech = t.alexaNightReport;
     cardTitle = "Overnight Activity Summary";
-    cardText = "14 Ring events detected. 13 safely filtered as harmless wind & cat.\n2:14 AM: Delivery Van turnaround (Low Threat). 0 breaches.";
+    cardText = "14 Ring events detected. 13 safely suppressed as harmless wind & cat.\n2:14 AM: Delivery Van turnaround (Low Threat). 0 perimeter breaches.";
     playAudioCue('safe');
   } else if (intentKey === 'security_report') {
     speech = t.alexaSecurityReport;
@@ -292,23 +337,23 @@ function executeAlexaIntent(intentKey) {
     playAudioCue('safe');
   }
 
-  // Update Echo Show preview frame
-  const titleEl = document.getElementById('echo-card-title');
-  const bodyEl = document.getElementById('echo-card-body');
-  const textEl = document.getElementById('alexa-speech-text');
-  const waveEl = document.getElementById('echo-wave');
+  // Update Echo Show in Alexa View
+  const titleEl = document.getElementById('echo-card-title-lg');
+  const bodyEl = document.getElementById('echo-card-body-lg');
+  const textEl = document.getElementById('alexa-speech-full');
+  const waveEl = document.getElementById('echo-wave-lg');
 
   if (titleEl) titleEl.textContent = cardTitle;
   if (bodyEl) bodyEl.textContent = cardText;
   if (textEl) textEl.textContent = `"${speech}"`;
 
-  // Animate soundwave
+  // Wave bounce
   if (waveEl) {
     waveEl.classList.add('active');
     setTimeout(() => waveEl.classList.remove('active'), 3500);
   }
 
-  // Native Speech Synthesis
+  // Native Web Speech
   if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(speech);
@@ -321,7 +366,7 @@ function executeAlexaIntent(intentKey) {
   announceToScreenReader(`Alexa: ${speech}`);
 }
 
-// Live Demo Scenario Simulator
+// Live Demo Scenarios
 function triggerDemoScenario(scenario) {
   const t = i18n[state.currentLang] || i18n.en;
 
@@ -340,17 +385,12 @@ function triggerDemoScenario(scenario) {
       summary: "Aarav (10) arrived home from school at 3:15 PM. Front door locked."
     });
 
-    const cardAarav = document.getElementById('fam-card-aarav');
-    if (cardAarav) {
-      cardAarav.querySelector('.status').textContent = "✅ Home · 3:15 PM (Locked)";
-    }
     renderEvents();
 
   } else if (scenario === 'night_visitor') {
     playAudioCue('critical');
     triggerHaptic(400);
 
-    // Update banner
     const banner = document.getElementById('active-threat-banner');
     if (banner) {
       banner.className = 'threat-banner critical';
@@ -360,11 +400,17 @@ function triggerDemoScenario(scenario) {
     }
 
     // Update AI Panel
-    document.getElementById('ai-assessment-badge').className = "threat-badge critical";
-    document.getElementById('ai-assessment-badge').textContent = "CRITICAL";
-    document.getElementById('ai-assessment-text').textContent = `"${t.aiThreatHigh}"`;
-    document.getElementById('ai-confidence-val').textContent = "96.4%";
-    document.getElementById('ai-confidence-fill').style.width = "96.4%";
+    const badge = document.getElementById('ai-assessment-badge');
+    if (badge) {
+      badge.className = "threat-badge critical";
+      badge.textContent = "CRITICAL";
+    }
+    const aiText = document.getElementById('ai-assessment-text');
+    if (aiText) aiText.textContent = `"${t.aiThreatHigh}"`;
+    const confVal = document.getElementById('ai-confidence-val');
+    if (confVal) confVal.textContent = "96.4%";
+    const confFill = document.getElementById('ai-confidence-fill');
+    if (confFill) confFill.style.width = "96.4%";
 
     state.events.unshift({
       id: `evt_${Date.now()}`,
@@ -382,11 +428,6 @@ function triggerDemoScenario(scenario) {
   } else if (scenario === 'grandma_wellness') {
     playAudioCue('medium');
     triggerHaptic(200);
-
-    const meeraText = document.getElementById('meera-status-text');
-    if (meeraText) {
-      meeraText.textContent = "⚠️ Wellness Alert (8.2h idle)";
-    }
     showToast("Grandma Meera (75): Inactivity detected for 8.2 hours. Automated wellness check prompted.", "medium");
 
   } else if (scenario === 'delivery') {
@@ -431,7 +472,7 @@ function triggerDemoScenario(scenario) {
   }
 }
 
-// Emergency SOS Action
+// Emergency SOS Trigger
 function triggerEmergencySOS() {
   playAudioCue('critical');
   triggerHaptic(800);
@@ -443,57 +484,12 @@ function triggerEmergencySOS() {
   }
 }
 
-// Synchronized Tab Switching for Sidebar & Mobile Bottom Nav
-function switchTab(tabName) {
-  // Update desktop sidebar
-  document.querySelectorAll('.sidebar .nav-item').forEach(item => {
-    if (item.dataset.tab === tabName) {
-      item.classList.add('active');
-    } else {
-      item.classList.remove('active');
-    }
-  });
-
-  // Update mobile bottom nav
-  document.querySelectorAll('.bottom-nav .nav-tab').forEach(tab => {
-    if (tab.dataset.tab === tabName) {
-      tab.classList.add('active');
-    } else {
-      tab.classList.remove('active');
-    }
-  });
-
-  // Scroll or focus corresponding section
-  const main = document.getElementById('main-content');
-  if (tabName === 'dashboard') {
-    main.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (tabName === 'patterns') {
-    const el = document.querySelector('section[aria-label="Behavioral Pattern Analysis"]');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (tabName === 'family') {
-    const el = document.querySelector('section[aria-label="Family Safety Intelligence"]');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (tabName === 'cameras') {
-    const el = document.querySelector('section[aria-label="Multi-Camera Unified View"]');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (tabName === 'alexa') {
-    const el = document.querySelector('section[aria-label="Alexa Voice Integration"]');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else if (tabName === 'settings') {
-    const drawer = document.getElementById('a11y-drawer');
-    if (drawer) drawer.classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  showToast(`Switched view to ${tabName.toUpperCase()}`, 'info');
-}
-
-// Initialization
+// DOM Setup
 document.addEventListener('DOMContentLoaded', () => {
   renderEvents();
   renderPatternChart();
 
-  // Navigation tab clicks (Desktop Sidebar)
+  // Desktop Sidebar Nav clicks
   document.querySelectorAll('.sidebar .nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
       const tab = e.currentTarget.dataset.tab;
@@ -501,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Navigation tab clicks (Mobile Bottom Nav)
+  // Mobile Bottom Nav clicks
   document.querySelectorAll('.bottom-nav .nav-tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       const targetTab = e.currentTarget.dataset.tab;
@@ -509,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Camera Selector Dropdown
+  // Camera Selector
   const cameraSelect = document.getElementById('camera-select');
   if (cameraSelect) {
     cameraSelect.addEventListener('change', (e) => {
@@ -519,7 +515,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filter Pills (All / Critical / Medium / Low)
+  // Filter Pills (Live Feed)
   document.querySelectorAll('.filter-pill').forEach(pill => {
     pill.addEventListener('click', (e) => {
       document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
@@ -529,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Live Scenario Simulator Buttons
+  // Scenario Buttons
   document.querySelectorAll('.btn-pill[data-scenario]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const scenario = e.currentTarget.dataset.scenario;
@@ -549,6 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBannerDetails = document.getElementById('btn-banner-details');
   if (btnBannerDetails) {
     btnBannerDetails.addEventListener('click', () => {
+      switchTab('dashboard');
       const panel = document.querySelector('section[aria-label="AI Threat Assessment"]');
       if (panel) {
         panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -559,16 +556,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Alexa Voice Intent Buttons
-  document.querySelectorAll('.btn-voice-intent').forEach(btn => {
+  document.querySelectorAll('.btn-voice-intent, .intent-card-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const intent = e.currentTarget.dataset.intent;
       executeAlexaIntent(intent);
     });
   });
 
-  // Emergency SOS Buttons (Desktop & Mobile)
-  const btnMainSOS = document.getElementById('btn-main-sos');
-  if (btnMainSOS) btnMainSOS.addEventListener('click', triggerEmergencySOS);
+  // SOS Buttons (Desktop Family space, Mobile SOS bar)
+  const btnFamilySOS = document.getElementById('btn-family-sos');
+  if (btnFamilySOS) btnFamilySOS.addEventListener('click', triggerEmergencySOS);
 
   const btnMobileSOS = document.getElementById('btn-mobile-sos');
   if (btnMobileSOS) btnMobileSOS.addEventListener('click', triggerEmergencySOS);
@@ -584,28 +581,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const btnDashLock = document.getElementById('btn-dash-quick-lock');
+  if (btnDashLock) {
+    btnDashLock.addEventListener('click', () => {
+      playAudioCue('safe');
+      btnDashLock.textContent = "✓ Locked";
+      showToast("Smart Deadbolt Engaged: Back door locked.", "low");
+    });
+  }
+
   const btnQuickSiren = document.getElementById('btn-quick-siren');
   if (btnQuickSiren) {
     btnQuickSiren.addEventListener('click', () => {
       playAudioCue('critical');
       showToast("Floodlight Siren Activated (110dB). Clip saved to cloud.", "critical");
-    });
-  }
-
-  const btnRecLock = document.getElementById('btn-rec-lock');
-  if (btnRecLock) {
-    btnRecLock.addEventListener('click', () => {
-      playAudioCue('safe');
-      btnRecLock.textContent = "✓ Locked";
-      showToast("Proactive Recommendation Accepted: Back door locked.", "low");
-    });
-  }
-
-  const btnRecGuard = document.getElementById('btn-rec-guard');
-  if (btnRecGuard) {
-    btnRecGuard.addEventListener('click', () => {
-      btnRecGuard.textContent = "✓ Guard Enabled";
-      showToast("SafeGuard Holiday Package Guard Activated.", "low");
     });
   }
 
@@ -621,76 +610,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Accessibility Controls
-  const btnA11y = document.getElementById('btn-a11y-toggle');
-  const a11yDrawer = document.getElementById('a11y-drawer');
-  const btnCloseA11y = document.getElementById('btn-close-a11y');
-
-  if (btnA11y && a11yDrawer) {
-    btnA11y.addEventListener('click', () => {
-      a11yDrawer.classList.toggle('hidden');
-    });
-  }
-  if (btnCloseA11y && a11yDrawer) {
-    btnCloseA11y.addEventListener('click', () => {
-      a11yDrawer.classList.add('hidden');
-    });
-  }
-
-  const chkContrast = document.getElementById('chk-high-contrast');
-  if (chkContrast) {
-    chkContrast.addEventListener('change', (e) => {
+  // Settings Toggles
+  const setContrast = document.getElementById('set-chk-contrast');
+  if (setContrast) {
+    setContrast.addEventListener('change', (e) => {
       document.body.classList.toggle('high-contrast', e.target.checked);
     });
   }
 
-  const chkLargeText = document.getElementById('chk-large-text');
-  if (chkLargeText) {
-    chkLargeText.addEventListener('change', (e) => {
+  const setLargeText = document.getElementById('set-chk-large-text');
+  if (setLargeText) {
+    setLargeText.addEventListener('change', (e) => {
       document.body.classList.toggle('large-text', e.target.checked);
     });
   }
 
-  const chkSound = document.getElementById('chk-sound-cues');
-  if (chkSound) {
-    chkSound.addEventListener('change', (e) => {
+  const setAudio = document.getElementById('set-chk-audio');
+  if (setAudio) {
+    setAudio.addEventListener('change', (e) => {
       state.soundEnabled = e.target.checked;
     });
   }
 
-  const chkHaptic = document.getElementById('chk-haptic-cues');
-  if (chkHaptic) {
-    chkHaptic.addEventListener('change', (e) => {
+  const setHaptic = document.getElementById('set-chk-haptic');
+  if (setHaptic) {
+    setHaptic.addEventListener('change', (e) => {
       state.hapticEnabled = e.target.checked;
     });
   }
 
-  const btnTestChime = document.getElementById('btn-test-chime');
-  if (btnTestChime) {
-    btnTestChime.addEventListener('click', () => {
-      playAudioCue('critical');
-      setTimeout(() => playAudioCue('medium'), 350);
-      setTimeout(() => playAudioCue('safe'), 700);
-    });
-  }
-
-  // Night Mode Toggle
-  const chkNight = document.getElementById('chk-night-mode-toggle');
-  if (chkNight) {
-    chkNight.addEventListener('change', (e) => {
+  // Night Vision Toggle
+  const camNightToggle = document.getElementById('cam-night-toggle');
+  if (camNightToggle) {
+    camNightToggle.addEventListener('change', (e) => {
       state.nightMode = e.target.checked;
       showToast(state.nightMode ? "Night Vision Active on all cameras." : "Daylight Mode.", "info");
     });
   }
 
-  // Live Clock for Echo Show Preview
-  function updateClock() {
-    const clock = document.getElementById('echo-clock');
-    if (clock) {
-      const now = new Date();
-      clock.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
+  // Live Clocks
+  function updateClocks() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const clockAlexa = document.getElementById('echo-clock-alexa');
+    if (clockAlexa) clockAlexa.textContent = timeStr;
   }
-  setInterval(updateClock, 30000);
-  updateClock();
+  setInterval(updateClocks, 30000);
+  updateClocks();
 });
