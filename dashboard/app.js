@@ -12,6 +12,15 @@ const state = {
   soundEnabled: true,
   hapticEnabled: true,
   nightMode: true,
+  isAuthenticated: true,
+  unreadNotifs: 3,
+  currentUser: {
+    name: 'Priya',
+    fullName: 'Priya Reddy',
+    email: 'priya.reddy@safeguard.internal',
+    role: 'Household Admin • Ring Pro',
+    avatar: '👩'
+  },
   events: [
     {
       id: "evt_101",
@@ -657,4 +666,300 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setInterval(updateClocks, 30000);
   updateClocks();
+
+  // =========================================================================
+  // NOTIFICATIONS & ACCOUNT DROPDOWNS & AUTHENTICATION
+  // =========================================================================
+
+  const btnNotif = document.getElementById('btn-notif');
+  const notifDropdown = document.getElementById('notifications-dropdown');
+  const notifBadge = document.getElementById('notif-badge');
+  const notifPillBadge = document.getElementById('notif-pill-badge');
+  const btnMarkAllRead = document.getElementById('btn-mark-all-read');
+  const notifList = document.getElementById('notif-list');
+  const btnNotifViewReports = document.getElementById('btn-notif-view-reports');
+
+  const btnUserProfile = document.getElementById('btn-user-profile');
+  const accountDropdown = document.getElementById('account-dropdown');
+  const btnLogout = document.getElementById('btn-logout');
+
+  const authModal = document.getElementById('auth-modal');
+  const btnAuthClose = document.getElementById('btn-auth-close');
+  const tabBtnLogin = document.getElementById('tab-btn-login');
+  const tabBtnSignup = document.getElementById('tab-btn-signup');
+  const paneLogin = document.getElementById('pane-login');
+  const paneSignup = document.getElementById('pane-signup');
+  const btnDemoLogin = document.getElementById('btn-demo-login');
+  const formLogin = document.getElementById('form-login');
+  const formSignup = document.getElementById('form-signup');
+
+  // Close all open dropdowns
+  function closeAllDropdowns() {
+    if (notifDropdown) notifDropdown.hidden = true;
+    if (accountDropdown) accountDropdown.hidden = true;
+    if (btnNotif) btnNotif.setAttribute('aria-expanded', 'false');
+    if (btnUserProfile) btnUserProfile.setAttribute('aria-expanded', 'false');
+  }
+
+  // Toggle Notifications Dropdown
+  if (btnNotif && notifDropdown) {
+    btnNotif.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const willOpen = notifDropdown.hidden;
+      closeAllDropdowns();
+      if (willOpen) {
+        notifDropdown.hidden = false;
+        btnNotif.setAttribute('aria-expanded', 'true');
+        playAudioCue('click');
+      }
+    });
+  }
+
+  // Mark all notifications as read
+  if (btnMarkAllRead) {
+    btnMarkAllRead.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.unreadNotifs = 0;
+      if (notifBadge) notifBadge.style.display = 'none';
+      if (notifPillBadge) notifPillBadge.textContent = '0 New';
+      if (notifList) {
+        notifList.querySelectorAll('.notif-item').forEach(item => {
+          item.classList.remove('unread');
+          item.classList.add('read');
+        });
+      }
+      playAudioCue('safe');
+      showToast('All security alerts marked as read.', 'low');
+    });
+  }
+
+  // Notification item click navigation
+  if (notifList) {
+    notifList.addEventListener('click', (e) => {
+      const item = e.target.closest('.notif-item');
+      if (!item) return;
+      item.classList.remove('unread');
+      item.classList.add('read');
+      const targetView = item.dataset.view || 'dashboard';
+      closeAllDropdowns();
+      switchTab(targetView);
+      showToast(`Navigated to ${targetView.toUpperCase()} from alert.`, 'info');
+    });
+  }
+
+  if (btnNotifViewReports) {
+    btnNotifViewReports.addEventListener('click', () => {
+      closeAllDropdowns();
+      switchTab('reports');
+    });
+  }
+
+  // Update User Profile UI
+  function updateUserUI() {
+    const topbarAvatar = document.getElementById('topbar-user-avatar');
+    const topbarName = document.getElementById('topbar-user-name');
+    const dropdownAvatar = document.getElementById('dropdown-avatar');
+    const dropdownName = document.getElementById('dropdown-name');
+    const dropdownEmail = document.getElementById('dropdown-email');
+
+    if (state.isAuthenticated) {
+      if (topbarAvatar) topbarAvatar.textContent = state.currentUser.avatar;
+      if (topbarName) topbarName.textContent = state.currentUser.name;
+      if (dropdownAvatar) dropdownAvatar.innerHTML = `${state.currentUser.avatar}<span class="online-dot"></span>`;
+      if (dropdownName) dropdownName.textContent = state.currentUser.fullName || state.currentUser.name;
+      if (dropdownEmail) dropdownEmail.textContent = state.currentUser.email;
+      if (btnUserProfile) btnUserProfile.title = `Active Account: ${state.currentUser.fullName || state.currentUser.name}`;
+    } else {
+      if (topbarAvatar) topbarAvatar.textContent = '🔑';
+      if (topbarName) topbarName.textContent = 'Sign In';
+      if (btnUserProfile) btnUserProfile.title = 'Logged out. Click to Sign In.';
+    }
+  }
+
+  // Toggle Account Dropdown or Open Auth Modal if logged out
+  if (btnUserProfile) {
+    btnUserProfile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!state.isAuthenticated) {
+        openAuthModal('login');
+        return;
+      }
+      const willOpen = accountDropdown.hidden;
+      closeAllDropdowns();
+      if (willOpen) {
+        accountDropdown.hidden = false;
+        btnUserProfile.setAttribute('aria-expanded', 'true');
+        playAudioCue('click');
+      }
+    });
+  }
+
+  // Account Menu items tab switcher
+  if (accountDropdown) {
+    accountDropdown.querySelectorAll('.acc-menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const targetTab = item.dataset.tab;
+        if (targetTab) {
+          closeAllDropdowns();
+          switchTab(targetTab);
+        }
+      });
+    });
+  }
+
+  // Log Out Handler
+  if (btnLogout) {
+    btnLogout.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.isAuthenticated = false;
+      closeAllDropdowns();
+      updateUserUI();
+      playAudioCue('critical');
+      showToast('Logged out of SafeGuard session.', 'info');
+      openAuthModal('login');
+    });
+  }
+
+  // Auth Modal Helpers
+  function openAuthModal(initialTab = 'login') {
+    closeAllDropdowns();
+    if (authModal) {
+      authModal.hidden = false;
+      switchAuthTab(initialTab);
+    }
+  }
+
+  function closeAuthModal() {
+    if (authModal) authModal.hidden = true;
+  }
+
+  function switchAuthTab(tabName) {
+    if (tabName === 'login') {
+      tabBtnLogin.classList.add('active');
+      tabBtnSignup.classList.remove('active');
+      paneLogin.hidden = false;
+      paneSignup.hidden = true;
+    } else {
+      tabBtnSignup.classList.add('active');
+      tabBtnLogin.classList.remove('active');
+      paneSignup.hidden = false;
+      paneLogin.hidden = true;
+    }
+  }
+
+  if (tabBtnLogin) tabBtnLogin.addEventListener('click', () => switchAuthTab('login'));
+  if (tabBtnSignup) tabBtnSignup.addEventListener('click', () => switchAuthTab('signup'));
+  if (btnAuthClose) btnAuthClose.addEventListener('click', closeAuthModal);
+
+  // Close modal when clicking backdrop outside card
+  if (authModal) {
+    authModal.addEventListener('click', (e) => {
+      if (e.target === authModal) {
+        closeAuthModal();
+      }
+    });
+  }
+
+  // One-Click Hackathon Demo Login
+  if (btnDemoLogin) {
+    btnDemoLogin.addEventListener('click', () => {
+      state.isAuthenticated = true;
+      state.currentUser = {
+        name: 'Priya',
+        fullName: 'Priya Reddy',
+        email: 'priya.reddy@safeguard.internal',
+        role: 'Household Admin • Ring Pro',
+        avatar: '👩'
+      };
+      updateUserUI();
+      closeAuthModal();
+      playAudioCue('safe');
+      showToast('Welcome back, Priya! SafeGuard AI is protecting 4 cameras.', 'low');
+    });
+  }
+
+  // Login Form Submission
+  if (formLogin) {
+    formLogin.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById('input-login-email');
+      const email = emailInput ? emailInput.value.trim() : 'priya.reddy@safeguard.internal';
+      
+      let displayName = 'Priya';
+      if (email.includes('@')) {
+        const rawName = email.split('@')[0].replace('.', ' ');
+        displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+      }
+
+      state.isAuthenticated = true;
+      state.currentUser = {
+        name: displayName.split(' ')[0],
+        fullName: displayName,
+        email: email,
+        role: 'Household Admin • Ring Pro',
+        avatar: '👩'
+      };
+
+      updateUserUI();
+      closeAuthModal();
+      playAudioCue('safe');
+      showToast(`Signed in successfully! Bedrock AI active for ${state.currentUser.name}.`, 'low');
+    });
+  }
+
+  // Sign Up Form Submission
+  if (formSignup) {
+    formSignup.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('input-signup-name');
+      const emailInput = document.getElementById('input-signup-email');
+      const ringInput = document.getElementById('input-signup-ring');
+      const roleSelect = document.getElementById('input-signup-role');
+      const passInput = document.getElementById('input-signup-pass');
+      const confirmInput = document.getElementById('input-signup-confirm');
+
+      if (passInput && confirmInput && passInput.value !== confirmInput.value) {
+        showToast('Passwords do not match. Please re-enter.', 'critical');
+        playAudioCue('critical');
+        return;
+      }
+
+      const fullName = nameInput ? nameInput.value.trim() : 'Madhava Reddy';
+      const shortName = fullName.split(' ')[0];
+      const email = emailInput ? emailInput.value.trim() : 'madhav@safeguard.io';
+      const role = roleSelect ? roleSelect.value : 'Admin';
+
+      state.isAuthenticated = true;
+      state.currentUser = {
+        name: shortName,
+        fullName: fullName,
+        email: email,
+        role: `${role} • Ring Pro`,
+        avatar: '👤'
+      };
+
+      updateUserUI();
+      closeAuthModal();
+      playAudioCue('safe');
+      showToast(`Account created & Ring linked! Welcome to SafeGuard, ${shortName}!`, 'low');
+    });
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.notif-wrapper') && !e.target.closest('.profile-wrapper')) {
+      closeAllDropdowns();
+    }
+  });
+
+  // ESC key closes dropdowns or modals
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeAllDropdowns();
+      if (authModal && !authModal.hidden) closeAuthModal();
+    }
+  });
+
+  // Initial user UI sync
+  updateUserUI();
 });

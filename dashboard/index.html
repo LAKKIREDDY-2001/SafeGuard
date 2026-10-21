@@ -15,8 +15,8 @@
     <!-- DESKTOP SIDEBAR (240px) -->
     <nav class="sidebar" aria-label="Main navigation">
       <div class="logo">
-        <span class="logo-shield">🛡️</span>
-        <span class="logo-text">Safe<span>Guard</span></span>
+        <img src="assets/logo.svg" alt="SafeGuard AI" class="brand-logo-full">
+        <img src="assets/icon.svg" alt="SafeGuard AI" class="brand-logo-icon">
       </div>
 
       <a class="nav-item active" data-tab="dashboard">
@@ -52,6 +52,12 @@
     <!-- TOP BAR (64px desktop / 56px mobile) -->
     <header class="topbar">
       <div class="topbar-left">
+        <!-- Mobile Brand (Visible when sidebar hidden on mobile) -->
+        <div class="mobile-brand" aria-label="SafeGuard Home">
+          <img src="assets/icon.svg" alt="SafeGuard" class="mobile-brand-icon">
+          <span class="mobile-brand-text">Safe<span class="accent-text">Guard</span></span>
+        </div>
+
         <!-- Camera Selector Dropdown -->
         <select class="camera-select" id="camera-select" aria-label="Select camera">
           <option value="all">📍 All Ring Cameras (4 Active)</option>
@@ -82,15 +88,171 @@
           <option value="de">🌐 Deutsch (German)</option>
         </select>
 
-        <!-- Notification Bell -->
-        <button id="btn-notif" class="icon-btn" aria-label="Notifications" title="Recent Alerts">
-          🔔<span class="badge-count" id="notif-badge">3</span>
-        </button>
+        <!-- Notification Bell & Dropdown Wrapper -->
+        <div class="topbar-item-wrapper notif-wrapper">
+          <button id="btn-notif" class="icon-btn" aria-label="Notifications" aria-expanded="false" title="Recent Alerts">
+            🔔<span class="badge-count" id="notif-badge">3</span>
+          </button>
 
-        <!-- User Profile Avatar -->
-        <div class="user-profile" title="Active Account: Priya Reddy">
-          <div class="user-avatar">👩</div>
-          <span class="user-name">Priya</span>
+          <!-- Notifications Dropdown -->
+          <div id="notifications-dropdown" class="dropdown-panel notif-dropdown" hidden role="region" aria-label="Security Notifications">
+            <div class="dropdown-header">
+              <div class="dropdown-header-title">
+                <span>Security Alerts</span>
+                <span class="notif-pill-badge" id="notif-pill-badge">3 New</span>
+              </div>
+              <button id="btn-mark-all-read" class="btn-text-action" type="button">Mark all read</button>
+            </div>
+
+            <div class="notif-list" id="notif-list">
+              <div class="notif-item unread critical" data-view="dashboard" tabindex="0" role="button">
+                <div class="notif-icon-col">
+                  <span class="notif-indicator critical">🔴</span>
+                </div>
+                <div class="notif-content-col">
+                  <div class="notif-item-header">
+                    <strong class="notif-title">Front Door — Unknown Male</strong>
+                    <span class="notif-time">2m ago</span>
+                  </div>
+                  <p class="notif-desc">3rd visit this week at 11:47 PM. Rekognition: No family match. Reconnaissance pattern.</p>
+                  <div class="notif-tags">
+                    <span class="notif-badge-tag critical">Threat: HIGH</span>
+                    <span class="notif-badge-tag bedrock">Rekognition AI</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="notif-item unread medium" data-view="family" tabindex="0" role="button">
+                <div class="notif-icon-col">
+                  <span class="notif-indicator medium">🟡</span>
+                </div>
+                <div class="notif-content-col">
+                  <div class="notif-item-header">
+                    <strong class="notif-title">Grandma's Living Room — Wellness Check</strong>
+                    <span class="notif-time">1h ago</span>
+                  </div>
+                  <p class="notif-desc">Inactivity detected for 8+ hours. Gentle check-in sent to Alexa Echo Show.</p>
+                  <div class="notif-tags">
+                    <span class="notif-badge-tag medium">Wellness Check</span>
+                    <span class="notif-badge-tag bedrock">Elder Care</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="notif-item unread low" data-view="family" tabindex="0" role="button">
+                <div class="notif-icon-col">
+                  <span class="notif-indicator low">🟢</span>
+                </div>
+                <div class="notif-content-col">
+                  <div class="notif-item-header">
+                    <strong class="notif-title">Front Door — Aarav Arrived Safe</strong>
+                    <span class="notif-time">3:15 PM</span>
+                  </div>
+                  <p class="notif-desc">Aarav (10) arrived home safely from school. Smart deadbolt locked automatically.</p>
+                  <div class="notif-tags">
+                    <span class="notif-badge-tag low">Family Safe</span>
+                    <span class="notif-badge-tag bedrock">Auto-Lock</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="notif-item read low" data-view="cameras" tabindex="0" role="button">
+                <div class="notif-icon-col">
+                  <span class="notif-indicator low">📦</span>
+                </div>
+                <div class="notif-content-col">
+                  <div class="notif-item-header">
+                    <strong class="notif-title">Driveway & Porch — USPS Package</strong>
+                    <span class="notif-time">11:20 AM</span>
+                  </div>
+                  <p class="notif-desc">Package delivered safely. USPS carrier verified. No perimeter breach.</p>
+                  <div class="notif-tags">
+                    <span class="notif-badge-tag low">Delivered</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dropdown-footer">
+              <span class="footer-sync-status">⚡ SNS Push Active (iPhone, Echo)</span>
+              <button class="footer-link-btn" id="btn-notif-view-reports" type="button">View Reports →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Profile Avatar & Dropdown Wrapper -->
+        <div class="topbar-item-wrapper profile-wrapper">
+          <button id="btn-user-profile" class="user-profile" aria-expanded="false" title="Active Account: Priya Reddy">
+            <div class="user-avatar" id="topbar-user-avatar">👩</div>
+            <span class="user-name" id="topbar-user-name">Priya</span>
+            <span class="user-chevron">▾</span>
+          </button>
+
+          <!-- Account Dropdown -->
+          <div id="account-dropdown" class="dropdown-panel account-dropdown" hidden role="region" aria-label="Account Settings">
+            <div class="account-card-header">
+              <div class="account-avatar-lg" id="dropdown-avatar">👩<span class="online-dot"></span></div>
+              <div class="account-meta">
+                <strong class="account-name" id="dropdown-name">Priya Reddy</strong>
+                <span class="account-email" id="dropdown-email">priya.reddy@safeguard.internal</span>
+                <span class="account-role-badge">🛡️ Household Admin • Ring Pro</span>
+              </div>
+            </div>
+
+            <div class="account-stats-row">
+              <div class="acc-stat">
+                <span class="acc-stat-num">4</span>
+                <span class="acc-stat-lbl">Cameras</span>
+              </div>
+              <div class="acc-stat">
+                <span class="acc-stat-num">Claude 3</span>
+                <span class="acc-stat-lbl">Bedrock AI</span>
+              </div>
+              <div class="acc-stat">
+                <span class="acc-stat-num">Armed</span>
+                <span class="acc-stat-lbl">Ring Guard</span>
+              </div>
+            </div>
+
+            <div class="account-menu">
+              <button class="acc-menu-item" type="button" data-action="tab" data-tab="settings">
+                <span class="acc-menu-icon">⚙️</span>
+                <div class="acc-menu-info">
+                  <strong>Security Preferences</strong>
+                  <small>Escalation contacts, threat sensitivities</small>
+                </div>
+              </button>
+              <button class="acc-menu-item" type="button" data-action="tab" data-tab="family">
+                <span class="acc-menu-icon">👨‍👩‍👧</span>
+                <div class="acc-menu-info">
+                  <strong>Family Profiles & Rekognition</strong>
+                  <small>Manage 4 members, face recognition</small>
+                </div>
+              </button>
+              <button class="acc-menu-item" type="button" data-action="tab" data-tab="cameras">
+                <span class="acc-menu-icon">📹</span>
+                <div class="acc-menu-info">
+                  <strong>Ring Camera Devices</strong>
+                  <small>Doorbells, Floodlights, Spotlight cams</small>
+                </div>
+              </button>
+              <button class="acc-menu-item" type="button" data-action="tab" data-tab="alexa">
+                <span class="acc-menu-icon">🎙️</span>
+                <div class="acc-menu-info">
+                  <strong>Alexa Voice Integration</strong>
+                  <small>Echo Show announcements & Guard</small>
+                </div>
+              </button>
+            </div>
+
+            <div class="account-footer">
+              <button id="btn-logout" class="dropdown-logout-btn" type="button">
+                <span>🚪</span>
+                <span>Log Out of SafeGuard</span>
+              </button>
+              <div class="acc-footer-sub">AWS Cognito & Ring OAuth 2.0 Protected</div>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -845,6 +1007,156 @@
 
   <!-- Screen Reader Live Announcer -->
   <div id="screen-reader-announcer" class="sr-only" aria-live="assertive"></div>
+
+  <!-- Authentication Modal (Login / Sign Up) -->
+  <div id="auth-modal" class="auth-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="auth-card">
+      <button class="auth-close-btn" id="btn-auth-close" aria-label="Close modal" type="button">✕</button>
+
+      <!-- Auth Header with Logo -->
+      <div class="auth-header">
+        <img src="assets/logo.svg" alt="SafeGuard" class="auth-brand-logo">
+        <h2 id="auth-modal-title" class="auth-title">Ring Security Intelligence Portal</h2>
+        <p class="auth-subtitle">Amazon Bedrock • Claude 3 Haiku • Rekognition AI</p>
+      </div>
+
+      <!-- Auth Tab Switcher -->
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab-btn active" id="tab-btn-login" role="tab" aria-selected="true" type="button">
+          🔑 Sign In
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-signup" role="tab" aria-selected="false" type="button">
+          🛡️ Create Account
+        </button>
+      </div>
+
+      <!-- Tab Pane 1: Sign In -->
+      <div class="auth-pane active" id="pane-login" role="tabpanel">
+        <!-- Quick Hackathon Demo Login -->
+        <div class="demo-evaluator-card">
+          <div class="demo-evaluator-header">
+            <span class="demo-bolt">⚡</span>
+            <div>
+              <strong>Amazon Developer Hackathon Evaluator</strong>
+              <p>Instant 1-Click access with 4 Ring cameras & Bedrock AI pre-linked</p>
+            </div>
+          </div>
+          <button type="button" id="btn-demo-login" class="btn-demo-quick">
+            <span>🚀</span> One-Click Demo Login as Priya (Admin)
+          </button>
+        </div>
+
+        <div class="auth-divider">
+          <span>or sign in with Ring credentials</span>
+        </div>
+
+        <form id="form-login" class="auth-form">
+          <div class="form-group">
+            <label for="input-login-email">Ring Account Email</label>
+            <div class="input-with-icon">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="input-login-email" value="priya.reddy@safeguard.internal" placeholder="name@domain.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label for="input-login-pass">Password</label>
+              <a href="#" id="link-forgot-pass" class="form-sublink">Forgot password?</a>
+            </div>
+            <div class="input-with-icon">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="input-login-pass" value="SafeGuard2026!#" placeholder="Master password" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <div class="form-row-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-remember-device" checked>
+              <span>Remember this Ring security console</span>
+            </label>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <span>Sign In to SafeGuard</span> <span>➔</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab Pane 2: Sign Up -->
+      <div class="auth-pane" id="pane-signup" role="tabpanel" hidden>
+        <form id="form-signup" class="auth-form">
+          <div class="form-group">
+            <label for="input-signup-name">Full Name</label>
+            <div class="input-with-icon">
+              <span class="input-icon">👤</span>
+              <input type="text" id="input-signup-name" placeholder="e.g. Venkata Madhava Reddy" required autocomplete="name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="input-signup-email">Account Email</label>
+            <div class="input-with-icon">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="input-signup-email" placeholder="name@domain.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label for="input-signup-ring">Ring Hardware ID</label>
+              <div class="input-with-icon">
+                <span class="input-icon">📹</span>
+                <input type="text" id="input-signup-ring" placeholder="RING-PRO2-9984" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-signup-role">Household Role</label>
+              <select id="input-signup-role" class="auth-select">
+                <option value="Admin">Household Admin (Owner)</option>
+                <option value="Family">Family Member</option>
+                <option value="Caregiver">Elder Caregiver</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label for="input-signup-pass">Master Password</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="input-signup-pass" placeholder="At least 8 chars" required autocomplete="new-password">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-signup-confirm">Confirm Password</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="input-signup-confirm" placeholder="Confirm password" required autocomplete="new-password">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-agree-terms" required checked>
+              <span>I consent to AWS Bedrock & Rekognition Ring stream analysis</span>
+            </label>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <span>Create Account & Link Ring</span> <span>🛡️</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-modal-footer">
+        <span>🔒 256-Bit TLS • AWS Cognito User Pool • Ring Event API 2026</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
