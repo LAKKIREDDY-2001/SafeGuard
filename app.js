@@ -21,6 +21,35 @@ const state = {
     role: 'Household Admin • Ring Pro',
     avatar: '👩'
   },
+  locks: {
+    frontDoor: {
+      id: 'frontDoor',
+      name: 'Front Door Pro Deadbolt',
+      location: 'Front Porch • Main Entry',
+      locked: true,
+      battery: 94,
+      autoLockSeconds: 45,
+      lastActivity: 'Secured via Auto-Lock (3:15 PM)'
+    },
+    backDoor: {
+      id: 'backDoor',
+      name: 'Backyard Patio Smart Lock',
+      location: 'Back Patio • Kitchen Deck',
+      locked: true,
+      battery: 89,
+      autoLockSeconds: 60,
+      lastActivity: 'Secured via Schedule (11:00 PM)'
+    },
+    garageDoor: {
+      id: 'garageDoor',
+      name: 'Garage Side Entry Deadbolt',
+      location: 'Mudroom • Garage Access',
+      locked: false,
+      battery: 91,
+      autoLockSeconds: 30,
+      lastActivity: 'Unlocked by Rahul at 6:45 PM'
+    }
+  },
   events: [
     {
       id: "evt_101",
@@ -263,6 +292,103 @@ function playAudioCue(type) {
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
       osc.start(now);
       osc.stop(now + 0.25);
+
+    } else if (type === 'lock') {
+      // MOTORIZED MECHANICAL SMART DEADBOLT LOCK
+      // 1. Motor hum with frequency drop (160 Hz -> 95 Hz)
+      const motorOsc = audioCtx.createOscillator();
+      const motorGain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, now);
+
+      motorOsc.type = 'sawtooth';
+      motorOsc.frequency.setValueAtTime(160, now);
+      motorOsc.frequency.linearRampToValueAtTime(95, now + 0.18);
+
+      motorGain.gain.setValueAtTime(0, now);
+      motorGain.gain.linearRampToValueAtTime(0.24, now + 0.02);
+      motorGain.gain.exponentialRampToValueAtTime(0.01, now + 0.20);
+
+      motorOsc.connect(filter);
+      filter.connect(motorGain);
+      motorGain.connect(audioCtx.destination);
+
+      motorOsc.start(now);
+      motorOsc.stop(now + 0.20);
+
+      // 2. Heavy dual metallic latch strike
+      const strike1 = audioCtx.createOscillator();
+      const strikeGain1 = audioCtx.createGain();
+      strike1.type = 'sine';
+      strike1.frequency.setValueAtTime(1200, now + 0.16);
+      strike1.frequency.exponentialRampToValueAtTime(220, now + 0.22);
+      strikeGain1.gain.setValueAtTime(0.35, now + 0.16);
+      strikeGain1.gain.exponentialRampToValueAtTime(0.001, now + 0.23);
+      strike1.connect(strikeGain1);
+      strikeGain1.connect(audioCtx.destination);
+      strike1.start(now + 0.16);
+      strike1.stop(now + 0.23);
+
+      const strike2 = audioCtx.createOscillator();
+      const strikeGain2 = audioCtx.createGain();
+      strike2.type = 'triangle';
+      strike2.frequency.setValueAtTime(600, now + 0.19);
+      strikeGain2.gain.setValueAtTime(0.25, now + 0.19);
+      strikeGain2.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      strike2.connect(strikeGain2);
+      strikeGain2.connect(audioCtx.destination);
+      strike2.start(now + 0.19);
+      strike2.stop(now + 0.25);
+
+    } else if (type === 'unlock') {
+      // MOTORIZED SMART DEADBOLT UNLOCK & SPRING RELEASE
+      // 1. Motor hum with frequency rise (105 Hz -> 180 Hz)
+      const motorOsc = audioCtx.createOscillator();
+      const motorGain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1100, now);
+
+      motorOsc.type = 'sawtooth';
+      motorOsc.frequency.setValueAtTime(105, now);
+      motorOsc.frequency.linearRampToValueAtTime(180, now + 0.16);
+
+      motorGain.gain.setValueAtTime(0, now);
+      motorGain.gain.linearRampToValueAtTime(0.22, now + 0.02);
+      motorGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+
+      motorOsc.connect(filter);
+      filter.connect(motorGain);
+      motorGain.connect(audioCtx.destination);
+
+      motorOsc.start(now);
+      motorOsc.stop(now + 0.18);
+
+      // 2. Crisp metallic spring clicks
+      const click1 = audioCtx.createOscillator();
+      const clickGain1 = audioCtx.createGain();
+      click1.type = 'sine';
+      click1.frequency.setValueAtTime(950, now + 0.13);
+      clickGain1.gain.setValueAtTime(0.26, now + 0.13);
+      clickGain1.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      click1.connect(clickGain1);
+      clickGain1.connect(audioCtx.destination);
+      click1.start(now + 0.13);
+      click1.stop(now + 0.18);
+
+      const click2 = audioCtx.createOscillator();
+      const clickGain2 = audioCtx.createGain();
+      click2.type = 'triangle';
+      click2.frequency.setValueAtTime(1400, now + 0.16);
+      clickGain2.gain.setValueAtTime(0.20, now + 0.16);
+      clickGain2.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      click2.connect(clickGain2);
+      clickGain2.connect(audioCtx.destination);
+      click2.start(now + 0.16);
+      click2.stop(now + 0.22);
 
     } else {
       // Pleasant Safe/Success Arpeggio
@@ -614,6 +740,188 @@ function triggerEmergencySOS() {
   }
 }
 
+// =========================================================================
+// SMART DEADBOLTS & PERIMETER LOCKS CONTROLLER
+// =========================================================================
+
+function setDoorLockState(doorKey, shouldLock, triggerSource = 'Manual UI') {
+  if (!state.locks || !state.locks[doorKey]) return;
+
+  const door = state.locks[doorKey];
+  door.locked = shouldLock;
+  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  door.lastActivity = `${shouldLock ? 'Secured' : 'Unlocked'} via ${triggerSource} (${timeStr})`;
+
+  playAudioCue(shouldLock ? 'lock' : 'unlock');
+  triggerHaptic(shouldLock ? 200 : 100);
+
+  updateLocksUI();
+
+  if (shouldLock) {
+    showToast(`🔒 ${door.name} secured. Motorized deadbolt engaged.`, 'low');
+  } else {
+    showToast(`🔓 ${door.name} unlocked. (${door.autoLockSeconds}s auto-lock timer running)`, 'medium');
+  }
+}
+
+function secureAllDoors() {
+  if (!state.locks) return;
+
+  let changed = false;
+  Object.keys(state.locks).forEach(k => {
+    if (!state.locks[k].locked) {
+      state.locks[k].locked = true;
+      state.locks[k].lastActivity = `Secured via 1-Tap Master Lock (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
+      changed = true;
+    }
+  });
+
+  playAudioCue('lock');
+  triggerHaptic(300);
+  updateLocksUI();
+  showToast("🔒 All 3 exterior smart deadbolts locked and verified secured.", "low");
+}
+
+function unlockAllDoors() {
+  if (!state.locks) return;
+
+  const confirmUnlock = confirm("⚠️ UNLOCK ALL EXTERIOR SMART DEADBOLTS?\n\nThis will disengage deadbolts on the Front Door, Backyard Patio, and Garage Entry.\n\nAre you sure you want to proceed?");
+  if (!confirmUnlock) return;
+
+  Object.keys(state.locks).forEach(k => {
+    state.locks[k].locked = false;
+    state.locks[k].lastActivity = `Unlocked via Master Unlock (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
+  });
+
+  playAudioCue('unlock');
+  triggerHaptic(200);
+  updateLocksUI();
+  showToast("🔓 Advisory: All exterior smart deadbolts have been unlocked.", "medium");
+}
+
+function updateLocksUI() {
+  if (!state.locks) return;
+
+  const unlockedCount = Object.values(state.locks).filter(l => !l.locked).length;
+
+  // 1. Topbar Lock Status Button
+  const btnTopbarLock = document.getElementById('btn-topbar-lock-toggle');
+  const topbarLockIcon = document.getElementById('topbar-lock-icon');
+  const topbarLockText = document.getElementById('topbar-lock-text');
+  const globalBadge = document.getElementById('smart-locks-global-badge');
+
+  if (btnTopbarLock) {
+    if (unlockedCount === 0) {
+      btnTopbarLock.className = 'btn-topbar-lock locked';
+      if (topbarLockIcon) topbarLockIcon.textContent = '🔒';
+      if (topbarLockText) topbarLockText.textContent = 'All Doors Secured';
+      if (globalBadge) {
+        globalBadge.className = 'threat-badge low';
+        globalBadge.textContent = 'All 3 Secured';
+      }
+    } else {
+      btnTopbarLock.className = 'btn-topbar-lock unlocked';
+      if (topbarLockIcon) topbarLockIcon.textContent = '🔓';
+      if (topbarLockText) topbarLockText.textContent = `${unlockedCount} Door${unlockedCount > 1 ? 's' : ''} Unlocked`;
+      if (globalBadge) {
+        globalBadge.className = 'threat-badge medium';
+        globalBadge.textContent = `${unlockedCount} Unlocked`;
+      }
+    }
+  }
+
+  // 2. Dashboard Smart Locks Console Cards
+  Object.keys(state.locks).forEach(key => {
+    const door = state.locks[key];
+    const cardSuffix = key === 'frontDoor' ? 'front' : (key === 'backDoor' ? 'back' : 'garage');
+    const card = document.getElementById(`lock-card-${cardSuffix}`);
+    const badge = document.getElementById(`badge-${key}`);
+    const activity = document.getElementById(`activity-${key}`);
+    const lockBtn = document.getElementById(`btn-lock-${cardSuffix}`);
+    const unlockBtn = document.getElementById(`btn-unlock-${cardSuffix}`);
+
+    if (card) {
+      card.classList.toggle('unlocked', !door.locked);
+    }
+    if (badge) {
+      badge.className = `lock-status-badge ${door.locked ? 'locked' : 'unlocked'}`;
+      badge.textContent = door.locked ? '🔒 Locked' : '🔓 Unlocked';
+    }
+    if (activity) {
+      activity.textContent = `Last activity: ${door.lastActivity}`;
+    }
+    if (lockBtn && unlockBtn) {
+      lockBtn.classList.toggle('lock-active', door.locked);
+      unlockBtn.classList.toggle('unlock-active', !door.locked);
+    }
+  });
+
+  // 3. Camera View Front Doorbell Card Badge & Buttons
+  const camFrontBadge = document.getElementById('cam-front-door-lock-badge');
+  const btnCamLockFront = document.getElementById('btn-cam-lock-front');
+  const btnCamUnlockFront = document.getElementById('btn-cam-unlock-front');
+  const frontLocked = state.locks.frontDoor && state.locks.frontDoor.locked;
+
+  if (camFrontBadge) {
+    camFrontBadge.textContent = frontLocked ? 'FRONT ENTRANCE • DEADBOLT LOCKED' : 'FRONT ENTRANCE • DEADBOLT UNLOCKED';
+    camFrontBadge.style.color = frontLocked ? 'var(--text-secondary)' : '#fbbf24';
+  }
+  if (btnCamLockFront) {
+    btnCamLockFront.style.color = frontLocked ? 'var(--threat-low)' : 'var(--text-secondary)';
+    btnCamLockFront.style.fontWeight = frontLocked ? '700' : '400';
+  }
+  if (btnCamUnlockFront) {
+    btnCamUnlockFront.style.color = !frontLocked ? 'var(--threat-medium)' : 'var(--text-secondary)';
+    btnCamUnlockFront.style.fontWeight = !frontLocked ? '700' : '400';
+  }
+
+  // 4. Video Player Modal Buttons
+  const btnForensicLock = document.getElementById('btn-forensic-lock');
+  const btnForensicUnlock = document.getElementById('btn-forensic-unlock');
+  if (btnForensicLock) {
+    btnForensicLock.className = frontLocked ? 'btn-ai-action' : 'btn-ai-secondary';
+    btnForensicLock.textContent = frontLocked ? '✓ Door Locked' : '🔒 Lock Door';
+  }
+  if (btnForensicUnlock) {
+    btnForensicUnlock.className = !frontLocked ? 'btn-ai-action' : 'btn-ai-secondary';
+    btnForensicUnlock.textContent = !frontLocked ? '✓ Unlocked' : '🔓 Unlock';
+  }
+
+  // 5. Intercom Modal Buttons
+  const btnIntercomLock = document.getElementById('btn-intercom-lock');
+  const btnIntercomUnlock = document.getElementById('btn-intercom-unlock');
+  if (btnIntercomLock) {
+    btnIntercomLock.classList.toggle('active', frontLocked);
+  }
+  if (btnIntercomUnlock) {
+    btnIntercomUnlock.classList.toggle('active', !frontLocked);
+  }
+
+  // 6. Dashboard AI Hero Quick-Lock and Proactive Advisory
+  const btnQuickLock = document.getElementById('btn-quick-lock');
+  const btnDashLock = document.getElementById('btn-dash-quick-lock');
+  const backLocked = state.locks.backDoor && state.locks.backDoor.locked;
+
+  if (btnQuickLock) {
+    if (backLocked) {
+      btnQuickLock.textContent = '✓ Back Door Locked';
+      btnQuickLock.style.background = 'var(--threat-low)';
+    } else {
+      btnQuickLock.textContent = '🔒 Lock Back Door';
+      btnQuickLock.style.background = '';
+    }
+  }
+  if (btnDashLock) {
+    if (backLocked) {
+      btnDashLock.textContent = '✓ Back Door Locked';
+      btnDashLock.style.background = 'var(--threat-low)';
+    } else {
+      btnDashLock.textContent = 'Lock Back Door Now';
+      btnDashLock.style.background = '';
+    }
+  }
+}
+
 // DOM Setup
 document.addEventListener('DOMContentLoaded', () => {
   renderEvents();
@@ -700,23 +1008,55 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnMobileSOS = document.getElementById('btn-mobile-sos');
   if (btnMobileSOS) btnMobileSOS.addEventListener('click', triggerEmergencySOS);
 
+  // Smart Locks Quick Status & Toggle Button (Topbar)
+  const btnTopbarLock = document.getElementById('btn-topbar-lock-toggle');
+  if (btnTopbarLock) {
+    btnTopbarLock.addEventListener('click', () => {
+      const unlockedCount = Object.values(state.locks).filter(l => !l.locked).length;
+      if (unlockedCount > 0) {
+        secureAllDoors();
+      } else {
+        showToast("Perimeter Secure: All 3 exterior smart deadbolts locked.", "low");
+        switchTab('dashboard');
+        const consoleEl = document.getElementById('smart-locks-console');
+        if (consoleEl) consoleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  // Smart Locks Panel Master Controls
+  const btnSecureAll = document.getElementById('btn-secure-all-doors');
+  if (btnSecureAll) {
+    btnSecureAll.addEventListener('click', secureAllDoors);
+  }
+
+  const btnUnlockAll = document.getElementById('btn-unlock-all-doors');
+  if (btnUnlockAll) {
+    btnUnlockAll.addEventListener('click', unlockAllDoors);
+  }
+
+  // Smart Locks Individual Cards Actions
+  document.querySelectorAll('[data-door-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.doorAction;
+      const doorKey = btn.dataset.doorKey;
+      setDoorLockState(doorKey, action === 'lock', 'Console');
+    });
+  });
+
   // Quick Action Buttons
   const btnQuickLock = document.getElementById('btn-quick-lock');
   if (btnQuickLock) {
     btnQuickLock.addEventListener('click', () => {
-      playAudioCue('safe');
-      btnQuickLock.textContent = "✓ Doors Locked";
-      btnQuickLock.style.background = "var(--threat-low)";
-      showToast("Smart Deadbolt Engaged: All exterior doors secured.", "low");
+      setDoorLockState('backDoor', true, 'AI Threat Panel');
     });
   }
 
   const btnDashLock = document.getElementById('btn-dash-quick-lock');
   if (btnDashLock) {
     btnDashLock.addEventListener('click', () => {
-      playAudioCue('safe');
-      btnDashLock.textContent = "✓ Locked";
-      showToast("Smart Deadbolt Engaged: Back door locked.", "low");
+      setDoorLockState('backDoor', true, 'Proactive Advisory');
     });
   }
 
@@ -1162,6 +1502,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPlayerSnapshot = document.getElementById('btn-player-snapshot');
   const btnForensicAlert = document.getElementById('btn-forensic-alert');
   const btnForensicLock = document.getElementById('btn-forensic-lock');
+  const btnForensicUnlock = document.getElementById('btn-forensic-unlock');
 
   let currentZoomIndex = 0;
   const zoomClasses = ['', 'zoom-15x', 'zoom-20x'];
@@ -1283,9 +1624,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnForensicLock) {
     btnForensicLock.addEventListener('click', () => {
-      playAudioCue('safe');
-      btnForensicLock.textContent = "✓ Locked";
-      showToast("Smart Deadbolt Engaged: All exterior doors secured.", "low");
+      setDoorLockState('frontDoor', true, 'Forensic Video Player');
+    });
+  }
+
+  if (btnForensicUnlock) {
+    btnForensicUnlock.addEventListener('click', () => {
+      setDoorLockState('frontDoor', false, 'Forensic Video Player');
     });
   }
 
@@ -1402,6 +1747,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnCallVideo) {
     btnCallVideo.addEventListener('click', () => {
       openVideoPlayer('doorbell_front');
+    });
+  }
+
+  // Intercom Door Lock / Unlock Actions
+  const btnIntercomLock = document.getElementById('btn-intercom-lock');
+  if (btnIntercomLock) {
+    btnIntercomLock.addEventListener('click', () => {
+      setDoorLockState('frontDoor', true, 'Two-Way Intercom');
+    });
+  }
+
+  const btnIntercomUnlock = document.getElementById('btn-intercom-unlock');
+  if (btnIntercomUnlock) {
+    btnIntercomUnlock.addEventListener('click', () => {
+      setDoorLockState('frontDoor', false, 'Two-Way Intercom');
     });
   }
 
@@ -1572,9 +1932,12 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast("🚨 Floodlight Siren Sounding (110dB)! Clip saved to cloud.", "critical");
       } else if (action === 'alert-dispatch') {
         openAlertDispatch("Grandma Wellness Alert");
+      } else if (action === 'lock') {
+        const door = btn.dataset.door || 'frontDoor';
+        setDoorLockState(door, true, 'Camera Surveillance');
       } else if (action === 'unlock') {
-        playAudioCue('safe');
-        showToast("Smart Deadbolt temporarily unlocked (45s).", "medium");
+        const door = btn.dataset.door || 'frontDoor';
+        setDoorLockState(door, false, 'Camera Surveillance');
       } else if (action === 'light') {
         playAudioCue('click');
         showToast("2000-Lumen Floodlight set to 100% brightness.", "info");
@@ -1629,6 +1992,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Initial user UI sync
+  // Initial UI sync
   updateUserUI();
+  updateLocksUI();
 });

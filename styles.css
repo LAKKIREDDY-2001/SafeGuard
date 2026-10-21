@@ -2932,6 +2932,381 @@ body {
   line-height: 1.5;
 }
 
+/* ===== TOPBAR SMART LOCK QUICK TOGGLE ===== */
+.btn-topbar-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: all var(--tr-fast);
+  white-space: nowrap;
+}
+
+.btn-topbar-lock:hover {
+  background: var(--bg-active);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-topbar-lock.locked {
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.btn-topbar-lock.locked:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--threat-low);
+}
+
+.btn-topbar-lock.unlocked {
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  animation: pulseLockWarn 2s infinite ease-in-out;
+}
+
+.btn-topbar-lock.unlocked:hover {
+  background: rgba(245, 158, 11, 0.22);
+}
+
+@keyframes pulseLockWarn {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
+  50% { box-shadow: 0 0 8px 2px rgba(245, 158, 11, 0.25); }
+}
+
+/* ===== SMART LOCKS PANEL (DASHBOARD) ===== */
+.smart-locks-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  transition: border-color var(--tr-fast);
+}
+
+.smart-locks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.smart-locks-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.smart-locks-heading {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.smart-locks-sub {
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+.smart-locks-global-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-global-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #fff;
+  border: 1px solid #10B981;
+  padding: 6px 14px;
+  border-radius: var(--radius-btn);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--tr-fast);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-global-lock:hover {
+  background: linear-gradient(135deg, #10B981, #059669);
+  transform: translateY(-1px);
+}
+
+.btn-global-unlock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: var(--radius-btn);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--tr-fast);
+}
+
+.btn-global-unlock:hover {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border-color: #f59e0b;
+}
+
+/* Locks Grid */
+.locks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+
+@media (max-width: 900px) {
+  .locks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lock-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  transition: all var(--tr-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.lock-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--threat-low);
+  opacity: 0.8;
+  transition: background var(--tr-fast);
+}
+
+.lock-card.unlocked::before {
+  background: var(--threat-medium);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+}
+
+.lock-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.lock-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lock-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lock-name {
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lock-location {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.lock-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.lock-status-badge.locked {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.lock-status-badge.unlocked {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  animation: pulseBadgeWarn 2s infinite;
+}
+
+@keyframes pulseBadgeWarn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.lock-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+.lock-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lock-detail-val {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.lock-activity-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-top: 2px;
+  border-left: 2px solid var(--accent);
+}
+
+.lock-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: var(--sp-2);
+}
+
+.btn-lock-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-btn);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: all var(--tr-fast);
+}
+
+.btn-lock-action:hover {
+  background: var(--bg-active);
+  color: var(--text-primary);
+}
+
+.btn-lock-action.lock-active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: var(--threat-low);
+  color: #34d399;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.btn-lock-action.unlock-active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--threat-medium);
+  color: #fbbf24;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+/* Intercom Door Controls */
+.intercom-door-controls {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  padding: 8px 12px;
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.intercom-door-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.intercom-door-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-intercom-door {
+  padding: 5px 10px;
+  border-radius: var(--radius-btn);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: all var(--tr-fast);
+}
+
+.btn-intercom-door:hover {
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn-intercom-door.lock.active {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: var(--threat-low);
+  color: #34d399;
+}
+
+.btn-intercom-door.unlock.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: var(--threat-medium);
+  color: #fbbf24;
+}
+
 /* ===== ACCESSIBILITY OVERRIDES ===== */
 body.high-contrast {
   --bg-base: #000000;
