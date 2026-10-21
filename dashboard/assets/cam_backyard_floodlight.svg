@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="100%" height="100%">
+  <defs>
+    <!-- 2000-Lumen Floodlight Cone Gradients -->
+    <radialGradient id="floodlightBeam1" cx="30%" cy="5%" r="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="35%" stop-color="#f8fafc" stop-opacity="0.45"/>
+      <stop offset="70%" stop-color="#64748b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="floodlightBeam2" cx="70%" cy="5%" r="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="35%" stop-color="#f8fafc" stop-opacity="0.45"/>
+      <stop offset="70%" stop-color="#64748b" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Motion Heatmap Vector -->
+    <radialGradient id="heatMap" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- BACKGROUND: NIGHT BACKYARD -->
+  <rect width="640" height="360" fill="#030712"/>
+
+  <!-- Wooden Backyard Fence -->
+  <rect x="0" y="110" width="640" height="120" fill="#1C1917" stroke="#292524" stroke-width="2"/>
+  <!-- Fence Slats -->
+  <g stroke="#0C0A09" stroke-width="2" opacity="0.7">
+    <line x1="40" y1="110" x2="40" y2="230"/>
+    <line x1="80" y1="110" x2="80" y2="230"/>
+    <line x1="120" y1="110" x2="120" y2="230"/>
+    <line x1="160" y1="110" x2="160" y2="230"/>
+    <line x1="200" y1="110" x2="200" y2="230"/>
+    <line x1="240" y1="110" x2="240" y2="230"/>
+    <line x1="280" y1="110" x2="280" y2="230"/>
+    <line x1="320" y1="110" x2="320" y2="230"/>
+    <line x1="360" y1="110" x2="360" y2="230"/>
+    <line x1="400" y1="110" x2="400" y2="230"/>
+    <line x1="440" y1="110" x2="440" y2="230"/>
+    <line x1="480" y1="110" x2="480" y2="230"/>
+    <line x1="520" y1="110" x2="520" y2="230"/>
+    <line x1="560" y1="110" x2="560" y2="230"/>
+    <line x1="600" y1="110" x2="600" y2="230"/>
+  </g>
+
+  <!-- Grass Lawn & Stone Patio -->
+  <rect x="0" y="210" width="640" height="150" fill="#064E3B" opacity="0.4"/>
+  <polygon points="0,230 640,230 640,360 0,360" fill="#0F172A"/>
+  <polygon points="120,250 520,250 590,360 50,360" fill="#1E293B" stroke="#334155" stroke-width="2"/>
+
+  <!-- Patio Furniture (Table & Chairs in Shadow) -->
+  <ellipse cx="160" cy="300" rx="45" ry="24" fill="#090D16" stroke="#1E293B" stroke-width="1.5"/>
+
+  <!-- 2000-Lumen Dual Floodlight Cones -->
+  <polygon points="190,0 60,360 380,360" fill="url(#floodlightBeam1)"/>
+  <polygon points="450,0 260,360 580,360" fill="url(#floodlightBeam2)"/>
+
+  <!-- Motion Heatmap Vector -->
+  <ellipse cx="440" cy="220" rx="90" ry="45" fill="url(#heatMap)"/>
+
+  <!-- SUSPICIOUS FIGURE BY FENCE PERIMETER -->
+  <g transform="translate(420, 140)">
+    <ellipse cx="20" cy="110" rx="24" ry="8" fill="#000000" opacity="0.7"/>
+    <path d="M10 75 L12 110 L18 110 L19 82 L21 82 L22 110 L28 110 L30 75 Z" fill="#0B101B"/>
+    <path d="M5 28 L35 28 L38 78 L2 78 Z" fill="#111827" stroke="#1F2937" stroke-width="1"/>
+    <ellipse cx="20" cy="18" rx="10" ry="12" fill="#080C14"/>
+  </g>
+
+  <!-- AI RED BOUNDING BOX (PERIMETER BREACH) -->
+  <g transform="translate(405, 135)">
+    <rect x="0" y="0" width="70" height="120" fill="rgba(239, 68, 68, 0.12)" stroke="#EF4444" stroke-width="2"/>
+    <path d="M -3 10 L -3 -3 L 10 -3" stroke="#EF4444" stroke-width="3" fill="none"/>
+    <path d="M 60 -3 L 73 -3 L 73 10" stroke="#EF4444" stroke-width="3" fill="none"/>
+    <path d="M -3 110 L -3 123 L 10 123" stroke="#EF4444" stroke-width="3" fill="none"/>
+    <path d="M 60 123 L 73 123 L 73 110" stroke="#EF4444" stroke-width="3" fill="none"/>
+
+    <!-- Alert Tag -->
+    <g transform="translate(-20, -30)">
+      <rect x="0" y="0" width="115" height="24" rx="4" fill="rgba(127, 29, 29, 0.95)" stroke="#EF4444" stroke-width="1.5"/>
+      <circle cx="10" cy="12" r="4" fill="#EF4444"/>
+      <text x="20" y="15" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="700" fill="#FFFFFF">PERIMETER BREACH</text>
+    </g>
+  </g>
+
+  <!-- RING HUD OVERLAY -->
+  <rect x="0" y="0" width="640" height="32" fill="linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0))"/>
+  <g transform="translate(14, 10)">
+    <circle cx="7" cy="7" r="6" stroke="#00D2FF" stroke-width="1.8" fill="none"/>
+    <circle cx="7" cy="7" r="2.5" fill="#00D2FF"/>
+    <text x="18" y="11" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#FFFFFF">ring</text>
+    <text x="46" y="11" font-family="'Inter', sans-serif" font-size="9" font-weight="500" fill="#94A3B8">Floodlight Cam Wired Plus • 2000 Lumens Active</text>
+  </g>
+
+  <g transform="translate(540, 10)">
+    <rect x="0" y="0" width="86" height="18" rx="4" fill="#EF4444"/>
+    <text x="43" y="12" font-family="'Inter', sans-serif" font-size="9" font-weight="700" fill="#FFFFFF" text-anchor="middle">🚨 SIREN READY</text>
+  </g>
+
+  <!-- Bottom Bar -->
+  <rect x="0" y="328" width="640" height="32" fill="linear-gradient(0deg, rgba(0,0,0,0.85), rgba(0,0,0,0))"/>
+  <text x="14" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#EF4444">2026-10-21 23:47:19 EDT • FLOODLIGHTS ON (100%)</text>
+  <text x="626" y="348" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="#F87171" text-anchor="end">Hardwired 120V • 110dB Siren Armed</text>
+</svg>

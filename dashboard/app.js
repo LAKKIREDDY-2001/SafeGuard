@@ -127,13 +127,123 @@ const audioCtx = (typeof window !== 'undefined' && (window.AudioContext || windo
 function playAudioCue(type) {
   if (!state.soundEnabled || !audioCtx) return;
   try {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
     const now = audioCtx.currentTime;
 
-    if (type === 'critical') {
+    if (type === 'doorbell' || type === 'chime') {
+      // REALISTIC RING DOORBELL CHIME ("Ding-Dong")
+      // High Bell Tone (Ding)
+      const osc1 = audioCtx.createOscillator();
+      const osc1Harmonic = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(880, now); // A5
+      osc1Harmonic.type = 'triangle';
+      osc1Harmonic.frequency.setValueAtTime(1760, now);
+
+      gain1.gain.setValueAtTime(0, now);
+      gain1.gain.linearRampToValueAtTime(0.35, now + 0.02);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+      osc1.connect(gain1);
+      osc1Harmonic.connect(gain1);
+      gain1.connect(audioCtx.destination);
+
+      osc1.start(now);
+      osc1Harmonic.start(now);
+      osc1.stop(now + 1.2);
+      osc1Harmonic.stop(now + 1.2);
+
+      // Low Bell Tone (Dong) at +0.42s
+      const osc2 = audioCtx.createOscillator();
+      const osc2Harmonic = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(587.33, now + 0.42); // D5
+      osc2Harmonic.type = 'triangle';
+      osc2Harmonic.frequency.setValueAtTime(1174.66, now + 0.42);
+
+      gain2.gain.setValueAtTime(0, now + 0.42);
+      gain2.gain.linearRampToValueAtTime(0.32, now + 0.44);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+      osc2.connect(gain2);
+      osc2Harmonic.connect(gain2);
+      gain2.connect(audioCtx.destination);
+
+      osc2.start(now + 0.42);
+      osc2Harmonic.start(now + 0.42);
+      osc2.stop(now + 2.0);
+      osc2Harmonic.stop(now + 2.0);
+
+    } else if (type === 'calling') {
+      // REALISTIC PHONE RING-BACK TONE (Dual 440Hz + 480Hz)
+      const osc1 = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(440, now);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(480, now);
+
+      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.setValueAtTime(0.14, now + 1.4);
+      gain.gain.linearRampToValueAtTime(0.001, now + 1.5);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 1.5);
+      osc2.stop(now + 1.5);
+
+    } else if (type === 'siren') {
+      // 110dB EMERGENCY SIREN SWEEP
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.linearRampToValueAtTime(1350, now + 0.4);
+      osc.frequency.linearRampToValueAtTime(650, now + 0.8);
+      osc.frequency.linearRampToValueAtTime(1350, now + 1.2);
+      osc.frequency.linearRampToValueAtTime(650, now + 1.6);
+
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.linearRampToValueAtTime(0.01, now + 1.8);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + 1.8);
+
+    } else if (type === 'radio_chirp') {
+      // PUSH-TO-TALK TWO-WAY CHIRP
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.04);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.05);
+
+    } else if (type === 'critical') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(880, now);
       osc.frequency.setValueAtTime(440, now + 0.15);
@@ -141,14 +251,25 @@ function playAudioCue(type) {
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
       osc.start(now);
       osc.stop(now + 0.35);
+
     } else if (type === 'medium') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       osc.type = 'sine';
       osc.frequency.setValueAtTime(587.33, now);
       gain.gain.setValueAtTime(0.2, now);
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
       osc.start(now);
       osc.stop(now + 0.25);
+
     } else {
+      // Pleasant Safe/Success Arpeggio
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(523.25, now);
       osc.frequency.setValueAtTime(659.25, now + 0.1);
@@ -945,18 +1066,566 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Close dropdowns on outside click
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.notif-wrapper') && !e.target.closest('.profile-wrapper')) {
-      closeAllDropdowns();
+  // =========================================================================
+  // CAMERA SCENES & HIGH-DEFINITION VIDEO PLAYER CONTROLLER
+  // =========================================================================
+
+  const cameraScenes = {
+    doorbell_front: {
+      name: "Front Doorbell Pro 2",
+      img: "assets/cam_front_door_night.svg",
+      badge: "LIVE 1080p HDR",
+      clock: "2026-10-21 23:47:19 EDT • IR NIGHT VISION ACTIVE",
+      forensicTitle: "✦ Bedrock AI Forensic: Unknown Person Loitering",
+      forensicDesc: "3rd visit in 5 days at 11:47 PM. Rekognition Face Match: 0% to family. Claude 3 Haiku Assessment: Reconnaissance loitering (duration 42s). Recommended: Smart Deadbolt lock + 110dB floodlight siren.",
+      doorbellRingAvailable: true
+    },
+    cam_backyard: {
+      name: "Backyard Floodlight Cam Wired",
+      img: "assets/cam_backyard_floodlight.svg",
+      badge: "THREAT ACTIVE • 2000 LM",
+      clock: "2026-10-21 23:47:19 EDT • FLOODLIGHTS ON (100%)",
+      forensicTitle: "✦ Bedrock AI Forensic: Backyard Perimeter Breach",
+      forensicDesc: "Motion detected near rear fence line at 11:47 PM. Correlated with Front Door event. Floodlight 2000lm triggered. 110dB Siren ready.",
+      doorbellRingAvailable: false
+    },
+    cam_driveway: {
+      name: "Driveway Spotlight Cam Plus",
+      img: "assets/cam_driveway_spotlight.svg",
+      badge: "SECURE • SPOTLIGHT ON",
+      clock: "2026-10-21 02:14:11 EDT • SPOTLIGHT ACTIVE",
+      forensicTitle: "✦ Bedrock AI Forensic: Vehicle Turnaround",
+      forensicDesc: "Delivery van turned around in driveway apron. No perimeter breach. Garage doors verified locked. Low Threat.",
+      doorbellRingAvailable: false
+    },
+    cam_grandma_living: {
+      name: "Grandma's Living Room Cam",
+      img: "assets/cam_grandma_room.svg",
+      badge: "WELLNESS CHECK ADVISORY",
+      clock: "2026-10-21 13:30:00 EDT • ELDER CARE AI SENSOR",
+      forensicTitle: "✦ Bedrock AI Forensic: Inactivity Advisory (8.2 Hours)",
+      forensicDesc: "Grandma Meera (75): No motion detected since 1:30 PM lunch. Echo Show 10 check-in prompt queued. High wellness priority.",
+      doorbellRingAvailable: false
+    },
+    aarav_arrival: {
+      name: "Front Doorbell Pro 2 — Aarav Arrival",
+      img: "assets/cam_aarav_arrival.svg",
+      badge: "FAMILY SAFE • VERIFIED",
+      clock: "2026-10-21 15:15:22 EDT • DAYLIGHT HDR",
+      forensicTitle: "✦ Bedrock AI Forensic: Child Arrived Home Safely",
+      forensicDesc: "Aarav Reddy (10) arrived from school at 3:15 PM. Rekognition Match: 99.1%. Front deadbolt confirmed auto-locked.",
+      doorbellRingAvailable: true
+    },
+    night_visitor: {
+      name: "Front Doorbell Pro 2 — Night Prowler",
+      img: "assets/cam_front_door_night.svg",
+      badge: "CRITICAL THREAT • HIGH",
+      clock: "2026-10-21 23:47:19 EDT • IR NIGHT VISION",
+      forensicTitle: "✦ Bedrock AI Forensic: Reconnaissance Activity Detected",
+      forensicDesc: "Unknown individual observed loitering on porch for 42s. 0% match to family profiles. Smart lock engaged.",
+      doorbellRingAvailable: true
+    },
+    grandma_wellness: {
+      name: "Grandma's Living Room — Wellness Check",
+      img: "assets/cam_grandma_room.svg",
+      badge: "WELLNESS ADVISORY",
+      clock: "2026-10-21 13:30:00 EDT • ELDER SENSOR",
+      forensicTitle: "✦ Bedrock AI Forensic: Inactivity Pattern Detected",
+      forensicDesc: "8.2 hours without living room movement. SafeGuard initiated gentle two-way check-in via Echo Show 10.",
+      doorbellRingAvailable: false
+    },
+    package: {
+      name: "Front Doorbell Pro 2 — Package Delivery",
+      img: "assets/cam_package_delivery.svg",
+      badge: "SAVED CLIP • PACKAGE GUARD",
+      clock: "2026-10-21 11:20:00 EDT • DAYLIGHT HDR",
+      forensicTitle: "✦ Bedrock AI Forensic: USPS Package Verified",
+      forensicDesc: "Package delivered safely to welcome mat. USPS carrier identified. Ring Package Guard active.",
+      doorbellRingAvailable: true
     }
+  };
+
+  const videoModal = document.getElementById('modal-video-player');
+  const videoHeading = document.getElementById('video-player-heading');
+  const videoBadge = document.getElementById('video-player-badge');
+  const videoFeedImg = document.getElementById('video-player-feed-img');
+  const videoClock = document.getElementById('video-clock-display');
+  const videoForensicTitle = document.getElementById('forensic-title');
+  const videoForensicDesc = document.getElementById('forensic-desc');
+  const videoCamSelect = document.getElementById('video-cam-select');
+  const btnCloseVideo = document.getElementById('btn-close-video');
+  const btnPlayerRing = document.getElementById('btn-player-ring-doorbell');
+  const btnHudAi = document.getElementById('btn-hud-ai');
+  const btnHudNight = document.getElementById('btn-hud-night');
+  const btnHudZoom = document.getElementById('btn-hud-zoom');
+  const btnPlayerIntercom = document.getElementById('btn-player-intercom');
+  const btnPlayerSnapshot = document.getElementById('btn-player-snapshot');
+  const btnForensicAlert = document.getElementById('btn-forensic-alert');
+  const btnForensicLock = document.getElementById('btn-forensic-lock');
+
+  let currentZoomIndex = 0;
+  const zoomClasses = ['', 'zoom-15x', 'zoom-20x'];
+  const zoomLabels = ['🔍 1.0x', '🔍 1.5x', '🔍 2.0x'];
+
+  function openVideoPlayer(camId = 'doorbell_front', sceneKey = null) {
+    if (!videoModal) return;
+    closeAllDropdowns();
+    videoModal.hidden = false;
+
+    const key = sceneKey || camId;
+    loadCameraScene(key);
+    playAudioCue('click');
+  }
+
+  function closeVideoPlayer() {
+    if (videoModal) videoModal.hidden = true;
+  }
+
+  function loadCameraScene(key) {
+    const scene = cameraScenes[key] || cameraScenes.doorbell_front;
+    if (videoHeading) videoHeading.textContent = scene.name;
+    if (videoBadge) videoBadge.textContent = scene.badge;
+    if (videoFeedImg) videoFeedImg.src = scene.img;
+    if (videoClock) videoClock.textContent = scene.clock;
+    if (videoForensicTitle) videoForensicTitle.textContent = scene.forensicTitle;
+    if (videoForensicDesc) videoForensicDesc.textContent = scene.forensicDesc;
+
+    if (btnPlayerRing) {
+      btnPlayerRing.style.display = scene.doorbellRingAvailable ? 'flex' : 'none';
+    }
+
+    if (videoCamSelect) {
+      if (['doorbell_front', 'cam_backyard', 'cam_driveway', 'cam_grandma_living'].includes(key)) {
+        videoCamSelect.value = key;
+      }
+    }
+  }
+
+  if (btnCloseVideo) btnCloseVideo.addEventListener('click', closeVideoPlayer);
+
+  if (videoCamSelect) {
+    videoCamSelect.addEventListener('change', (e) => {
+      loadCameraScene(e.target.value);
+    });
+  }
+
+  // Timeline Marker Chips
+  document.querySelectorAll('.timeline-marker-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.timeline-marker-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const scene = chip.dataset.scene;
+      loadCameraScene(scene);
+      showToast(`Scrubbed video timeline to ${chip.textContent.trim()}`, 'info');
+    });
   });
 
-  // ESC key closes dropdowns or modals
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeAllDropdowns();
-      if (authModal && !authModal.hidden) closeAuthModal();
+  // HUD AI Overlay Toggle
+  if (btnHudAi) {
+    btnHudAi.addEventListener('click', () => {
+      btnHudAi.classList.toggle('active');
+      const isActive = btnHudAi.classList.contains('active');
+      showToast(isActive ? "Rekognition AI Bounding Box HUD: ON" : "AI Vision Overlays: Hidden", "info");
+    });
+  }
+
+  // Night Vision IR Toggle
+  if (btnHudNight && videoFeedImg) {
+    btnHudNight.addEventListener('click', () => {
+      btnHudNight.classList.toggle('active');
+      videoFeedImg.classList.toggle('night-vision-filter', btnHudNight.classList.contains('active'));
+      showToast(btnHudNight.classList.contains('active') ? "Infrared Monochrome Filter Enabled" : "Daylight Color Sensor Mode", "info");
+    });
+  }
+
+  // Digital Zoom Toggle
+  if (btnHudZoom && videoFeedImg) {
+    btnHudZoom.addEventListener('click', () => {
+      currentZoomIndex = (currentZoomIndex + 1) % zoomClasses.length;
+      videoFeedImg.className = `video-player-img ${zoomClasses[currentZoomIndex]} ${btnHudNight.classList.contains('active') ? 'night-vision-filter' : ''}`.trim();
+      btnHudZoom.textContent = zoomLabels[currentZoomIndex];
+    });
+  }
+
+  // Realistic Doorbell Ring
+  function triggerDoorbellRing() {
+    playAudioCue('doorbell');
+    triggerHaptic(500);
+    showToast("🔔 DING-DONG! Ring Doorbell pressed at Front Door!", "critical");
+
+    setTimeout(() => {
+      startIntercomCall('doorbell');
+    }, 1200);
+  }
+
+  if (btnPlayerRing) {
+    btnPlayerRing.addEventListener('click', triggerDoorbellRing);
+  }
+
+  if (btnPlayerIntercom) {
+    btnPlayerIntercom.addEventListener('click', () => {
+      startIntercomCall('doorbell');
+    });
+  }
+
+  if (btnPlayerSnapshot) {
+    btnPlayerSnapshot.addEventListener('click', () => {
+      playAudioCue('click');
+      showToast("HD Forensic Snapshot saved to cloud & local device.", "low");
+    });
+  }
+
+  if (btnForensicAlert) {
+    btnForensicAlert.addEventListener('click', () => {
+      openAlertDispatch("Front Door Threat Loitering");
+    });
+  }
+
+  if (btnForensicLock) {
+    btnForensicLock.addEventListener('click', () => {
+      playAudioCue('safe');
+      btnForensicLock.textContent = "✓ Locked";
+      showToast("Smart Deadbolt Engaged: All exterior doors secured.", "low");
+    });
+  }
+
+  // =========================================================================
+  // TWO-WAY AUDIO INTERCOM & FAMILY CALLING CONTROLLER
+  // =========================================================================
+
+  const intercomModal = document.getElementById('modal-intercom');
+  const intercomHeading = document.getElementById('intercom-heading');
+  const intercomDeviceDesc = document.getElementById('intercom-device-desc');
+  const intercomAvatarIcon = document.getElementById('intercom-avatar-icon');
+  const intercomStatusBadge = document.getElementById('intercom-status-badge');
+  const intercomStatusText = document.getElementById('intercom-status-text');
+  const btnCloseIntercom = document.getElementById('btn-close-intercom');
+  const btnCallHangup = document.getElementById('btn-call-hangup');
+  const btnCallMute = document.getElementById('btn-call-mute');
+  const btnCallSpeaker = document.getElementById('btn-call-speaker');
+  const btnCallVideo = document.getElementById('btn-call-video');
+
+  let intercomTimer = null;
+  let intercomSeconds = 0;
+  let waveAnimId = null;
+
+  const intercomTargets = {
+    priya: {
+      name: "Priya Reddy (Work)",
+      desc: "iPhone 14 Pro • Low-Latency Ring WebRTC VoIP Stream",
+      avatar: "👩"
+    },
+    aarav: {
+      name: "Aarav Reddy (Kids Room)",
+      desc: "Echo Dot 5th Gen • Kids Bedroom Intercom",
+      avatar: "👦"
+    },
+    meera: {
+      name: "Grandma Meera (Living Room)",
+      desc: "Echo Show 10 • Kitchen & Living Room Drop-In",
+      avatar: "👵"
+    },
+    anita: {
+      name: "Anita Sharma (Caregiver)",
+      desc: "Mobile Phone • Authorized Caregiver VoIP",
+      avatar: "👩‍💼"
+    },
+    doorbell: {
+      name: "Front Doorbell Pro 2",
+      desc: "Two-Way Audio Talk • Wide-Angle Mic & Speaker",
+      avatar: "🚪"
+    }
+  };
+
+  function startIntercomCall(targetKey = 'priya') {
+    if (!intercomModal) return;
+    closeAllDropdowns();
+    intercomModal.hidden = false;
+
+    const t = intercomTargets[targetKey] || intercomTargets.doorbell;
+    if (intercomHeading) intercomHeading.textContent = `Calling ${t.name}`;
+    if (intercomDeviceDesc) intercomDeviceDesc.textContent = t.desc;
+    if (intercomAvatarIcon) intercomAvatarIcon.textContent = t.avatar;
+
+    // Ringing state
+    if (intercomStatusBadge) intercomStatusBadge.className = 'intercom-status-pill ringing';
+    if (intercomStatusText) intercomStatusText.textContent = "Ringing...";
+    playAudioCue('calling');
+
+    clearInterval(intercomTimer);
+    intercomSeconds = 0;
+
+    setTimeout(() => {
+      if (intercomModal.hidden) return; // cancelled before connect
+      playAudioCue('radio_chirp');
+      if (intercomStatusBadge) intercomStatusBadge.className = 'intercom-status-pill';
+
+      intercomTimer = setInterval(() => {
+        intercomSeconds++;
+        const mins = String(Math.floor(intercomSeconds / 60)).padStart(2, '0');
+        const secs = String(intercomSeconds % 60).padStart(2, '0');
+        if (intercomStatusText) intercomStatusText.textContent = `Connected • ${mins}:${secs}`;
+      }, 1000);
+
+      startIntercomWaveform();
+      showToast(`2-Way Audio Connected to ${t.name}`, 'low');
+    }, 2000);
+  }
+
+  function endIntercomCall() {
+    if (intercomModal) intercomModal.hidden = true;
+    clearInterval(intercomTimer);
+    cancelAnimationFrame(waveAnimId);
+    playAudioCue('radio_chirp');
+    showToast("Call ended.", "info");
+  }
+
+  if (btnCloseIntercom) btnCloseIntercom.addEventListener('click', endIntercomCall);
+  if (btnCallHangup) btnCallHangup.addEventListener('click', endIntercomCall);
+
+  if (btnCallMute) {
+    btnCallMute.addEventListener('click', () => {
+      btnCallMute.classList.toggle('active');
+      const isMuted = btnCallMute.classList.contains('active');
+      btnCallMute.textContent = isMuted ? "🔇" : "🎙️";
+      showToast(isMuted ? "Microphone muted" : "Microphone active", "info");
+    });
+  }
+
+  if (btnCallSpeaker) {
+    btnCallSpeaker.addEventListener('click', () => {
+      btnCallSpeaker.classList.toggle('active');
+      showToast("Speaker boost active (100%)", "info");
+    });
+  }
+
+  if (btnCallVideo) {
+    btnCallVideo.addEventListener('click', () => {
+      openVideoPlayer('doorbell_front');
+    });
+  }
+
+  // Canned voice responses
+  document.querySelectorAll('.canned-chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const phrase = btn.dataset.say || btn.textContent;
+      playAudioCue('radio_chirp');
+
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        try {
+          const utterance = new SpeechSynthesisUtterance(phrase);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          window.speechSynthesis.speak(utterance);
+        } catch (e) {
+          console.warn("Speech synthesis error:", e);
+        }
+      }
+      showToast(`Spoke over Intercom: "${phrase}"`, 'low');
+    });
+  });
+
+  // Animated Waveform Canvas
+  function startIntercomWaveform() {
+    const canvas = document.getElementById('intercom-wave-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let step = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const bars = 36;
+      const barWidth = canvas.width / bars;
+
+      for (let i = 0; i < bars; i++) {
+        const height = Math.abs(Math.sin((i * 0.28) + (step * 0.12))) * 32 + 6;
+        const x = i * barWidth;
+        const y = (canvas.height - height) / 2;
+
+        ctx.fillStyle = '#00D2FF';
+        ctx.fillRect(x + 2, y, barWidth - 4, height);
+      }
+      step++;
+      waveAnimId = requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  // =========================================================================
+  // EMERGENCY ALERT & WORKING MEMBER DISPATCHER CONTROLLER
+  // =========================================================================
+
+  const dispatchModal = document.getElementById('modal-alert-dispatch');
+  const btnCloseDispatch = document.getElementById('btn-close-dispatch');
+  const btnTriggerDispatch = document.getElementById('btn-trigger-dispatch');
+  const dispatchConsole = document.getElementById('dispatch-console');
+
+  function openAlertDispatch(presetIncident = "Front Door Threat") {
+    if (!dispatchModal) return;
+    closeAllDropdowns();
+    if (dispatchConsole) dispatchConsole.style.display = 'none';
+    dispatchModal.hidden = false;
+    playAudioCue('click');
+  }
+
+  function closeAlertDispatch() {
+    if (dispatchModal) dispatchModal.hidden = true;
+  }
+
+  if (btnCloseDispatch) btnCloseDispatch.addEventListener('click', closeAlertDispatch);
+
+  if (btnTriggerDispatch) {
+    btnTriggerDispatch.addEventListener('click', () => {
+      btnTriggerDispatch.disabled = true;
+      btnTriggerDispatch.textContent = "⚡ Dispatching via AWS SNS...";
+      playAudioCue('calling');
+
+      if (dispatchConsole) {
+        dispatchConsole.style.display = 'block';
+        dispatchConsole.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ⚡ AWS SNS Client initializing region us-east-1...</div>`;
+
+        setTimeout(() => {
+          dispatchConsole.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ✓ SMS Alert delivered to Priya Reddy (+1-555-0199) • Latency: 114ms</div>`;
+          playAudioCue('radio_chirp');
+        }, 650);
+
+        setTimeout(() => {
+          dispatchConsole.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ✓ Alexa Guard Announcement queued to 3 Echo endpoints</div>`;
+          playAudioCue('doorbell');
+        }, 1300);
+
+        setTimeout(() => {
+          dispatchConsole.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ✓ High-Priority iOS APNs Push Delivered with Rekognition Snapshot</div>`;
+          btnTriggerDispatch.disabled = false;
+          btnTriggerDispatch.textContent = "✓ Dispatched Successfully";
+          showToast("🚨 Emergency Alert Dispatched to Family & Priya's Office!", "critical");
+        }, 1900);
+      }
+    });
+  }
+
+  // =========================================================================
+  // EVENT DELEGATION FOR FAMILY CARDS & CAMERA FEEDS
+  // =========================================================================
+
+  // Family Member Action Buttons
+  document.querySelectorAll('[data-action="call-member"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const member = btn.dataset.member || 'priya';
+      startIntercomCall(member);
+    });
+  });
+
+  document.querySelectorAll('[data-action="alert-member"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openAlertDispatch();
+    });
+  });
+
+  document.querySelectorAll('[data-action="view-member-cam"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const cam = btn.dataset.cam || 'doorbell_front';
+      const scene = btn.dataset.scene || 'aarav_arrival';
+      openVideoPlayer(cam, scene);
+    });
+  });
+
+  document.querySelectorAll('[data-action="nudge-member"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      playAudioCue('safe');
+      const member = btn.dataset.member;
+      if (member === 'aarav') {
+        showToast("Alexa Whisper sent to Aarav's Echo: 'Please ensure front door deadbolt is locked.'", "low");
+      } else {
+        showToast("Caregiver Shift Notice dispatched via SMS.", "info");
+      }
+    });
+  });
+
+  // Camera Card Viewport Click to Open Stream
+  document.querySelectorAll('.camera-viewport-large').forEach(vp => {
+    vp.addEventListener('click', () => {
+      const cam = vp.dataset.cam || 'doorbell_front';
+      openVideoPlayer(cam);
+    });
+  });
+
+  // Camera Card Control Buttons
+  document.querySelectorAll('[data-cam-action]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.camAction;
+      const cam = btn.dataset.cam || 'doorbell_front';
+
+      if (action === 'stream') {
+        openVideoPlayer(cam);
+      } else if (action === 'talk') {
+        startIntercomCall(cam === 'cam_grandma_living' ? 'meera' : 'doorbell');
+      } else if (action === 'doorbell-ring') {
+        triggerDoorbellRing();
+      } else if (action === 'siren') {
+        playAudioCue('siren');
+        showToast("🚨 Floodlight Siren Sounding (110dB)! Clip saved to cloud.", "critical");
+      } else if (action === 'alert-dispatch') {
+        openAlertDispatch("Grandma Wellness Alert");
+      } else if (action === 'unlock') {
+        playAudioCue('safe');
+        showToast("Smart Deadbolt temporarily unlocked (45s).", "medium");
+      } else if (action === 'light') {
+        playAudioCue('click');
+        showToast("2000-Lumen Floodlight set to 100% brightness.", "info");
+      } else if (action === 'clip') {
+        playAudioCue('click');
+        showToast("60-Second forensic HD clip saved to cloud storage.", "low");
+      } else if (action === 'spotlight') {
+        playAudioCue('click');
+        showToast("Spotlight beam toggled ON.", "info");
+      } else if (action === 'garage') {
+        playAudioCue('safe');
+        showToast("Garage door sensor verified CLOSED.", "low");
+      }
+    });
+  });
+
+  // Dashboard Banner Buttons
+  const btnBannerAlert = document.getElementById('btn-banner-alert-family');
+  if (btnBannerAlert) {
+    btnBannerAlert.addEventListener('click', () => {
+      openAlertDispatch("Active Front Door Threat");
+    });
+  }
+
+  const btnBannerClip = document.getElementById('btn-banner-view-clip');
+  if (btnBannerClip) {
+    btnBannerClip.addEventListener('click', () => {
+      openVideoPlayer('doorbell_front', 'night_visitor');
+    });
+  }
+
+  const btnHeroClip = document.getElementById('btn-hero-watch-clip');
+  if (btnHeroClip) {
+    btnHeroClip.addEventListener('click', () => {
+      openVideoPlayer('doorbell_front', 'night_visitor');
+    });
+  }
+
+  const btnHeroAlert = document.getElementById('btn-hero-alert-family');
+  if (btnHeroAlert) {
+    btnHeroAlert.addEventListener('click', () => {
+      openAlertDispatch("Front Door Unknown Person Loitering");
+    });
+  }
+
+  // Close modals on escape key or backdrop click
+  [videoModal, intercomModal, dispatchModal].forEach(m => {
+    if (m) {
+      m.addEventListener('click', (e) => {
+        if (e.target === m) m.hidden = true;
+      });
     }
   });
 
