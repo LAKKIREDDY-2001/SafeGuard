@@ -4,629 +4,539 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SafeGuard — AI-Powered Ring Security Intelligence Platform</title>
-  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="theme-dark">
-  <!-- Top Navigation & Live Header -->
-  <header class="navbar" role="banner">
-    <div class="nav-brand">
-      <div class="brand-logo">
-        <div class="ring-pulse"></div>
-        <span class="logo-icon">🛡️</span>
-      </div>
-      <div class="brand-text">
-        <h1>SafeGuard <span class="badge-ring">Ring AI</span></h1>
-        <p class="tagline">"Your Ring sees everything. SafeGuard understands it all."</p>
-      </div>
-    </div>
+<body>
+  <div class="app">
 
-    <!-- Quick Status Badges -->
-    <div class="nav-metrics" aria-label="System Metrics">
-      <div class="metric-pill" title="Amazon Bedrock + Rekognition active">
-        <span class="status-dot green"></span>
-        <span class="metric-label">Bedrock AI:</span>
-        <span class="metric-val">Claude 3 Haiku</span>
+    <!-- DESKTOP SIDEBAR (240px) -->
+    <nav class="sidebar" aria-label="Main navigation">
+      <div class="logo">
+        <span class="logo-shield">🛡️</span>
+        <span class="logo-text">Safe<span>Guard</span></span>
       </div>
-      <div class="metric-pill" title="Alert Noise Filtered">
-        <span class="status-dot blue"></span>
-        <span class="metric-label">Noise Reduction:</span>
-        <span class="metric-val" id="noise-reduction-val">95.1%</span>
-      </div>
-      <div class="metric-pill" title="Home Insurance Proactive Score">
-        <span class="status-dot green"></span>
-        <span class="metric-label">Security Score:</span>
-        <span class="metric-val" id="security-score-val">96/100</span>
-      </div>
-    </div>
 
-    <!-- Controls: Language, Accessibility, Emergency -->
-    <div class="nav-actions">
-      <!-- Multi-Language Selector (5 Languages) -->
-      <div class="lang-selector-wrapper">
-        <label for="lang-select" class="sr-only">Choose Language</label>
-        <span class="globe-icon" aria-hidden="true">🌐</span>
-        <select id="lang-select" class="lang-select" aria-label="Language selector">
-          <option value="en">English (US)</option>
-          <option value="hi">हिन्दी (Hindi)</option>
-          <option value="te">తెలుగు (Telugu)</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="de">Deutsch (German)</option>
+      <a class="nav-item active" data-tab="dashboard">
+        <span class="icon">🏠</span> <span class="nav-item-text">Dashboard</span>
+      </a>
+      <a class="nav-item" data-tab="patterns">
+        <span class="icon">📊</span> <span class="nav-item-text">Patterns</span>
+      </a>
+      <a class="nav-item" data-tab="family">
+        <span class="icon">👨‍👩‍👧</span> <span class="nav-item-text">Family</span>
+      </a>
+      <a class="nav-item" data-tab="cameras">
+        <span class="icon">📹</span> <span class="nav-item-text">Cameras</span>
+      </a>
+      <a class="nav-item" data-tab="alexa">
+        <span class="icon">🎙️</span> <span class="nav-item-text">Alexa Voice</span>
+      </a>
+      <a class="nav-item" data-tab="reports">
+        <span class="icon">📋</span> <span class="nav-item-text">Reports</span>
+      </a>
+      <a class="nav-item" data-tab="settings">
+        <span class="icon">⚙️</span> <span class="nav-item-text">Settings</span>
+      </a>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-ai-badge" title="Amazon Bedrock Claude 3 Haiku Engine Active">
+          <span class="ai-pulse-dot"></span>
+          <span>Bedrock AI Active</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- TOP BAR (64px desktop / 56px mobile) -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <!-- Camera Selector Dropdown -->
+        <select class="camera-select" id="camera-select" aria-label="Select camera">
+          <option value="all">📍 All Ring Cameras (4 Active)</option>
+          <option value="doorbell_front" selected>📍 Front Doorbell Pro 2</option>
+          <option value="cam_backyard">📍 Backyard Floodlight Cam</option>
+          <option value="cam_driveway">📍 Driveway Spotlight Cam</option>
+          <option value="cam_grandma_living">📍 Grandma's Living Room Cam</option>
         </select>
+
+        <!-- Hackathon Live Scenario Quick-Tester Pills -->
+        <div class="demo-scenario-pills" aria-label="Live Demo Scenario Simulator">
+          <span class="pill-label">⚡ Live Scenarios:</span>
+          <button class="btn-pill" data-scenario="aarav_arrival">🎒 Aarav Arrival</button>
+          <button class="btn-pill" data-scenario="night_visitor">🌙 Night Prowler</button>
+          <button class="btn-pill" data-scenario="grandma_wellness">👵 Elder Check</button>
+          <button class="btn-pill" data-scenario="delivery">📦 Delivery</button>
+          <button class="btn-pill" data-scenario="forced_entry">⚠️ Forced Entry</button>
+        </div>
       </div>
 
-      <!-- Accessibility Controls Button -->
-      <button id="btn-a11y-toggle" class="btn-icon" aria-label="Toggle Accessibility Panel" title="Accessibility Settings">
-        ♿
-      </button>
+      <div class="topbar-right">
+        <!-- 5-Language Selector -->
+        <select id="lang-select" class="lang-select-top" aria-label="Choose Language">
+          <option value="en">🌐 English (US)</option>
+          <option value="hi">🌐 हिन्दी (Hindi)</option>
+          <option value="te">🌐 తెలుగు (Telugu)</option>
+          <option value="es">🌐 Español (Spanish)</option>
+          <option value="de">🌐 Deutsch (German)</option>
+        </select>
 
-      <!-- 1-Tap Emergency SOS Panic Button -->
-      <button id="btn-emergency-sos" class="btn-sos" aria-label="One-tap Emergency SOS broadcast">
-        <span class="sos-icon">🚨</span> <span>EMERGENCY SOS</span>
-      </button>
-    </div>
-  </header>
+        <!-- Accessibility Panel Toggle -->
+        <button id="btn-a11y-toggle" class="icon-btn" aria-label="Accessibility settings" title="Accessibility Center">
+          ♿
+        </button>
 
-  <!-- Accessibility Settings Drawer (Collapsible) -->
-  <aside id="a11y-panel" class="a11y-panel hidden" aria-label="Accessibility options" role="region">
-    <div class="a11y-header">
-      <h3>♿ Multi-Modal Accessibility Center</h3>
-      <button id="btn-close-a11y" class="btn-close" aria-label="Close accessibility panel">&times;</button>
-    </div>
-    <div class="a11y-grid">
-      <label class="toggle-control">
+        <!-- Notification Bell -->
+        <button id="btn-notif" class="icon-btn" aria-label="Notifications" title="Recent Alerts">
+          🔔<span class="badge-count" id="notif-badge">3</span>
+        </button>
+
+        <!-- User Profile Avatar -->
+        <div class="user-profile" title="Active Account: Priya Reddy">
+          <div class="user-avatar">👩</div>
+          <span class="user-name">Priya</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ACCESSIBILITY DRAWER -->
+    <div id="a11y-drawer" class="a11y-drawer hidden" role="region" aria-label="Accessibility Controls">
+      <span style="font-size:var(--fs-xs);font-weight:700;color:var(--accent);">♿ ACCESSIBILITY CENTER:</span>
+      <label class="a11y-toggle-item">
         <input type="checkbox" id="chk-high-contrast">
-        <span class="control-label">High Contrast Mode</span>
+        <span>High Contrast Mode (WCAG AAA)</span>
       </label>
-      <label class="toggle-control">
+      <label class="a11y-toggle-item">
         <input type="checkbox" id="chk-large-text">
-        <span class="control-label">Large Text Mode (Elderly Friendly)</span>
+        <span>Large Text Mode (Elderly Friendly)</span>
       </label>
-      <label class="toggle-control">
+      <label class="a11y-toggle-item">
         <input type="checkbox" id="chk-sound-cues" checked>
-        <span class="control-label">Audio Alert Chimes (Distinct Tones)</span>
+        <span>Audio Alert Chimes (Synthesized Web Audio)</span>
       </label>
-      <label class="toggle-control">
+      <label class="a11y-toggle-item">
         <input type="checkbox" id="chk-haptic-cues" checked>
-        <span class="control-label">Haptic Vibration Simulation</span>
+        <span>Haptic Feedback</span>
       </label>
-      <button id="btn-test-chime" class="btn-secondary btn-sm">🔊 Test Audio Cue</button>
+      <button id="btn-test-chime" class="btn-pill">🔊 Test Chimes</button>
+      <button id="btn-close-a11y" style="margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;">&times; Close</button>
     </div>
-    <div id="screen-reader-announcer" class="sr-only" aria-live="polite"></div>
-  </aside>
 
-  <!-- Interactive Simulation Toolbar (Hackathon Showcase Bar) -->
-  <section class="demo-bar" aria-label="Live Demo Scenario Simulator">
-    <div class="demo-bar-title">
-      <span class="sparkle">⚡</span>
-      <strong>Live Demo Scenarios:</strong>
-    </div>
-    <div class="demo-scenarios">
-      <button class="btn-scenario" data-scenario="aarav_arrival">
-        🎒 Aarav Arrival (3:15 PM)
-      </button>
-      <button class="btn-scenario" data-scenario="night_visitor">
-        🌙 Unknown Night Visitor (11:47 PM)
-      </button>
-      <button class="btn-scenario" data-scenario="grandma_wellness">
-        👵 Grandma Meera Wellness Check (8h)
-      </button>
-      <button class="btn-scenario" data-scenario="delivery">
-        📦 Package Delivery (FedEx)
-      </button>
-      <button class="btn-scenario" data-scenario="forced_entry">
-        ⚠️ Forced Entry Alarm (Critical)
-      </button>
-    </div>
-  </section>
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="main" id="main-content">
 
-  <!-- Main Dashboard Grid -->
-  <main class="dashboard-container">
-
-    <!-- Row 1: KPI Stats & Noise Reduction Showcase -->
-    <section class="kpi-banner" aria-label="Platform Highlights">
-      <div class="kpi-card">
-        <div class="kpi-icon ring-blue">📷</div>
-        <div class="kpi-content">
-          <span class="kpi-label">Raw Ring Camera Events</span>
-          <h2 class="kpi-val" id="stat-raw-events">164</h2>
-          <span class="kpi-sub">50-200 / day per household</span>
+      <!-- ACTIVE THREAT BANNER (MOBILE & DESKTOP DYNAMIC SLIDE-IN) -->
+      <aside class="threat-banner" id="active-threat-banner" role="alert">
+        <div class="threat-banner-left">
+          <span class="banner-pulse-icon">🟡</span>
+          <div>
+            <div class="banner-title" id="banner-title-text">MEDIUM THREAT ACTIVE — Front Door (11:47 PM)</div>
+            <div class="banner-sub" id="banner-sub-text">Unknown individual, 3rd visit this week. Rekognition: 0% match to family profiles.</div>
+          </div>
         </div>
-      </div>
-
-      <div class="kpi-card highlight-glow">
-        <div class="kpi-icon shield-green">🧠</div>
-        <div class="kpi-content">
-          <span class="kpi-label">SafeGuard AI Meaningful Alerts</span>
-          <h2 class="kpi-val" id="stat-alerts">8</h2>
-          <span class="kpi-sub">Only actionable threats & family events</span>
+        <div class="banner-actions">
+          <a class="banner-link" id="btn-banner-details">View Details →</a>
+          <button class="banner-dismiss" id="btn-banner-dismiss" aria-label="Dismiss banner">&times;</button>
         </div>
-      </div>
+      </aside>
 
-      <div class="kpi-card">
-        <div class="kpi-icon noise-purple">⚡</div>
-        <div class="kpi-content">
-          <span class="kpi-label">Alert Fatigue Reduction</span>
-          <h2 class="kpi-val" id="stat-noise-pct">95.1%</h2>
-          <span class="kpi-sub">Suppresses wind, shadows, and animals</span>
+      <!-- KPI ROW (4 across desktop / 2x2 mobile) -->
+      <section class="kpi-grid" aria-label="Platform Telemetry Overview">
+        <div class="kpi-card">
+          <div class="label">Events Today</div>
+          <div class="value" id="kpi-events-val">150 <span style="font-size:16px;color:var(--text-muted);">→</span> 8</div>
+          <div class="trend down" id="kpi-noise-trend">↓ 95.1% noise filtered</div>
         </div>
-      </div>
 
-      <div class="kpi-card">
-        <div class="kpi-icon star-gold">🛡️</div>
-        <div class="kpi-content">
-          <span class="kpi-label">Insurance Safety Score</span>
-          <h2 class="kpi-val">96 <span class="kpi-unit">/ 100</span></h2>
-          <span class="kpi-sub highlight-text">Eligible for 12% premium discount</span>
+        <div class="kpi-card">
+          <div class="label">Threat Level</div>
+          <div class="value" id="kpi-threat-val" style="color:var(--threat-medium);">MEDIUM</div>
+          <div class="trend" id="kpi-active-alert-desc">1 active advisory</div>
         </div>
-      </div>
-    </section>
 
-    <!-- Main 3-Column Content Layout -->
-    <div class="content-columns">
+        <div class="kpi-card">
+          <div class="label">Family Status</div>
+          <div class="value" id="kpi-family-val" style="color:var(--threat-low);">SAFE</div>
+          <div class="trend up" id="kpi-family-desc">Aarav & Priya Accounted For</div>
+        </div>
 
-      <!-- Column 1: Live Event Stream & Threat Assessment Engine -->
-      <section class="col-stream" aria-label="Live Ring Events & AI Assessments">
-        <div class="card header-row">
+        <div class="kpi-card">
+          <div class="label">Security Score</div>
+          <div class="value" id="kpi-score-val">96<span style="font-size:16px;color:var(--text-muted);">/100</span></div>
+          <div class="trend up">↑ 3 pts • 12% insurance discount</div>
+        </div>
+      </section>
+
+      <!-- CARD 1: LIVE EVENT FEED (SPAN 2 COLS DESKTOP) -->
+      <section class="card span-2-desk" aria-label="Live Event Feed">
+        <div class="card-header-styled">
           <div class="card-title">
-            <h3>🔴 1. Real-Time Event Dashboard & AI Threat Assessment</h3>
-            <span class="live-indicator"><span class="pulse-red"></span> LIVE</span>
+            <span>🔴 Live Event Feed</span>
+            <span style="font-size:11px;font-weight:700;color:var(--threat-critical);background:rgba(239,68,68,0.15);padding:2px 6px;border-radius:4px;">LIVE</span>
           </div>
           <div class="filter-pills">
-            <button class="pill active" data-filter="all">All</button>
-            <button class="pill" data-filter="critical">Critical</button>
-            <button class="pill" data-filter="medium">Medium</button>
-            <button class="pill" data-filter="low">Low</button>
+            <button class="filter-pill active" data-filter="all">All</button>
+            <button class="filter-pill" data-filter="critical">Critical</button>
+            <button class="filter-pill" data-filter="medium">Medium</button>
+            <button class="filter-pill" data-filter="low">Low</button>
           </div>
         </div>
 
-        <!-- Latest AI Assessment Hero Card -->
-        <div id="latest-threat-hero" class="card hero-threat-card threat-critical">
-          <div class="hero-header">
-            <div class="threat-badge-lg critical" id="hero-threat-badge">
-              CRITICAL THREAT
+        <div class="event-feed" id="live-event-feed" role="feed">
+          <!-- Populated dynamically via app.js -->
+          <div class="event-item critical">
+            <span class="time">11:47 PM</span>
+            <div class="content">
+              <span class="camera-tag">Backyard Floodlight</span>
+              <div class="summary">"Unknown male, 3rd visit this week at 11:47 PM. No matching family profile."</div>
             </div>
-            <div class="hero-score">
-              <span class="score-label">AI Threat Score:</span>
-              <strong id="hero-threat-score">0.94 / 1.0</strong>
-            </div>
-            <div class="hero-time" id="hero-threat-time">11:47 PM (Backyard Floodlight)</div>
+            <span class="threat-badge critical">HIGH</span>
           </div>
-          <div class="hero-body">
-            <div class="hero-media">
-              <div class="mock-camera-view">
-                <div class="cam-overlay-tag">BACKYARD FLOODLIGHT • REC ●</div>
-                <div class="bounding-box-sim">
-                  <span class="box-label">UNKNOWN PERSON [0.94]</span>
-                </div>
-                <div class="cam-icon-backdrop">👤</div>
-              </div>
-            </div>
-            <div class="hero-details">
-              <div class="bedrock-tag">
-                <span class="bedrock-logo">✦</span> Amazon Bedrock Claude 3 Haiku Synthesis:
-              </div>
-              <p class="threat-summary" id="hero-threat-summary">
-                "Unknown individual, 3rd visit this week at 11:47 PM. No matching family profile. Cross-referenced with neighborhood correlation: Threat level HIGH."
-              </p>
-              <div class="recommended-action-box">
-                <span class="action-icon">💡</span>
-                <span class="action-text" id="hero-recommended-action">
-                  <strong>Recommended Action:</strong> Lock exterior doors. Floodlight engaged; saving 60-second HD security clip.
-                </span>
-              </div>
-              <div class="action-buttons-row">
-                <button class="btn-primary btn-sm" id="btn-hero-action">Lock Back Door</button>
-                <button class="btn-secondary btn-sm" id="btn-hero-siren">Sound Floodlight Siren</button>
-                <button class="btn-text btn-sm" id="btn-hero-dismiss">Dismiss</button>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Scrolling Stream of Recent Events -->
-        <div class="card event-stream-card">
-          <div class="stream-header">
-            <h4>Recent Ring Camera Events</h4>
-            <span class="subtext">Auto-analyzed with Amazon Rekognition & Bedrock</span>
+          <div class="event-item low">
+            <span class="time">3:15 PM</span>
+            <div class="content">
+              <span class="camera-tag">Front Doorbell Pro 2</span>
+              <div class="summary">"Aarav (10) arrived home from school. Front door locked."</div>
+            </div>
+            <span class="threat-badge low">LOW</span>
           </div>
-          <div id="events-stream-list" class="events-list" role="feed" aria-busy="false">
-            <!-- Dynamically populated by app.js -->
+
+          <div class="event-item medium">
+            <span class="time">1:30 PM</span>
+            <div class="content">
+              <span class="camera-tag">Grandma's Living Room</span>
+              <div class="summary">"Grandma Meera (75): Inactivity detected for 8+ hours. Wellness check initiated."</div>
+            </div>
+            <span class="threat-badge medium">MEDIUM</span>
+          </div>
+
+          <div class="event-item low">
+            <span class="time">11:20 AM</span>
+            <div class="content">
+              <span class="camera-tag">Front Doorbell Pro 2</span>
+              <div class="summary">"Package delivered safely. USPS carrier identified."</div>
+            </div>
+            <span class="threat-badge low">LOW</span>
           </div>
         </div>
       </section>
 
-      <!-- Column 2: Family Safety Monitor & Behavioral Patterns -->
-      <section class="col-middle">
-        
-        <!-- Feature 3: Family Safety Intelligence -->
-        <div class="card family-card" aria-label="Family Safety Monitor">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="card-icon">👨‍👩‍👧‍👦</span>
-              <div>
-                <h3>3. Family Safety Intelligence</h3>
-                <p class="card-subtitle">"SafeGuard doesn't just watch your home. It watches over your family."</p>
-              </div>
+      <!-- CARD 2: AI THREAT ASSESSMENT (SPAN 1 COL DESKTOP) -->
+      <section class="card span-1-desk" aria-label="AI Threat Assessment">
+        <div class="card-header-styled">
+          <div class="card-title">🧠 AI Threat Assessment</div>
+          <span style="font-size:var(--fs-xs);color:var(--text-muted);">Bedrock Claude 3 Haiku</span>
+        </div>
+
+        <div class="ai-panel">
+          <div class="ai-panel-header">
+            <span class="ai-model-tag">✦ Dual AI Reasoning</span>
+            <span class="threat-badge critical" id="ai-assessment-badge">CRITICAL</span>
+          </div>
+
+          <p class="ai-text" id="ai-assessment-text">
+            "Unknown male, 3rd visit this week, 11:47 PM. No matching family profile. Cross-referenced with neighborhood correlation: Pattern suggests reconnaissance behavior."
+          </p>
+
+          <div class="ai-action-box" id="ai-action-box">
+            <strong>Recommended Action:</strong> Lock exterior doors, activate floodlight, and alert emergency contacts.
+          </div>
+
+          <div class="confidence-wrapper">
+            <div class="confidence-header">
+              <span>Rekognition Facial Confidence:</span>
+              <strong id="ai-confidence-val">94.2%</strong>
+            </div>
+            <div class="confidence-bar">
+              <div class="fill" id="ai-confidence-fill" style="width: 94.2%;"></div>
             </div>
           </div>
 
-          <!-- Family Member Status Cards -->
-          <div class="family-grid">
-            
-            <!-- Aarav (Child) -->
-            <div class="member-card safe">
-              <div class="member-avatar child">👦</div>
-              <div class="member-info">
-                <div class="member-title-row">
-                  <h4>Aarav Reddy</h4>
-                  <span class="role-badge">Child • 10 yrs</span>
-                </div>
-                <div class="status-indicator-row">
-                  <span class="status-pill green">Safe at Home</span>
-                  <span class="lock-indicator">🔒 Front Door Locked</span>
-                </div>
-                <p class="member-note">Arrived from school at 3:15 PM. Curfew: 8:00 PM.</p>
-              </div>
-            </div>
+          <div class="ai-quick-actions">
+            <button class="btn-ai-action" id="btn-quick-lock">🔒 Lock Back Door</button>
+            <button class="btn-ai-secondary" id="btn-quick-siren">🚨 Siren (110dB)</button>
+          </div>
+        </div>
+      </section>
 
-            <!-- Grandma Meera (Elder) -->
-            <div class="member-card warning" id="card-grandma-meera">
-              <div class="member-avatar elder">👵</div>
-              <div class="member-info">
-                <div class="member-title-row">
-                  <h4>Grandma Meera</h4>
-                  <span class="role-badge">Elder • 75 yrs</span>
-                </div>
-                <div class="status-indicator-row">
-                  <span class="status-pill amber" id="meera-status-pill">Wellness Check Alert</span>
-                  <span class="wellness-time">8.2 hrs Inactive</span>
-                </div>
-                <p class="member-note">Lives alone. No living room camera motion detected since 1:30 PM.</p>
-                <div class="member-quick-actions">
-                  <button class="btn-xs btn-outline" id="btn-call-grandma">📞 Call Grandma</button>
-                  <button class="btn-xs btn-outline" id="btn-check-livingroom">🎥 View Living Room</button>
-                </div>
-              </div>
-            </div>
+      <!-- CARD 3: FAMILY SAFETY (SPAN 1 COL DESKTOP) -->
+      <section class="card span-1-desk" aria-label="Family Safety Intelligence">
+        <div class="card-header-styled">
+          <div class="card-title">👨‍👩‍👧 Family Safety</div>
+          <span class="card-subtitle">Milestones & Wellness</span>
+        </div>
 
-            <!-- Priya (Parent) -->
-            <div class="member-card safe">
-              <div class="member-avatar parent">👩</div>
-              <div class="member-info">
-                <div class="member-title-row">
-                  <h4>Priya Reddy</h4>
-                  <span class="role-badge">Parent • 38 yrs</span>
-                </div>
-                <div class="status-indicator-row">
-                  <span class="status-pill green">Active</span>
-                  <span>Working Remotely</span>
-                </div>
-                <p class="member-note">Primary alert recipient. SafeGuard mobile app connected.</p>
-              </div>
+        <!-- Family Member Cards -->
+        <div class="family-grid" id="family-members-grid">
+          <div class="family-card" id="fam-card-aarav">
+            <div class="avatar">👦</div>
+            <div class="family-card-info">
+              <span class="family-card-name">Aarav (10)</span>
+              <span class="status safe">✅ Home · 3:15 PM</span>
             </div>
+          </div>
 
-            <!-- Anita (Babysitter) -->
-            <div class="member-card verified">
-              <div class="member-avatar babysitter">👩‍💼</div>
-              <div class="member-info">
-                <div class="member-title-row">
-                  <h4>Anita Sharma</h4>
-                  <span class="role-badge">Caretaker / Babysitter</span>
-                </div>
-                <div class="status-indicator-row">
-                  <span class="status-pill blue">Verified Match</span>
-                  <span>Rekognition 95.8%</span>
-                </div>
-                <p class="member-note">Pre-approved caretaker profile. Checked in yesterday at 6:00 PM.</p>
-              </div>
+          <div class="family-card" id="fam-card-priya">
+            <div class="avatar">👩</div>
+            <div class="family-card-info">
+              <span class="family-card-name">Priya (38)</span>
+              <span class="status safe">✅ Home · Working</span>
             </div>
+          </div>
 
+          <div class="family-card warning" id="fam-card-meera">
+            <div class="avatar">👵</div>
+            <div class="family-card-info">
+              <span class="family-card-name">Grandma Meera</span>
+              <span class="status warning" id="meera-status-text">⚠️ 8h No Motion</span>
+            </div>
+          </div>
+
+          <div class="family-card" id="fam-card-anita">
+            <div class="avatar">👩‍💼</div>
+            <div class="family-card-info">
+              <span class="family-card-name">Anita Sharma</span>
+              <span class="status safe">✅ Caregiver Verified</span>
+            </div>
           </div>
         </div>
 
-        <!-- Feature 2: Behavioral Pattern Analyzer -->
-        <div class="card patterns-card" aria-label="Behavioral Pattern Analysis">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="card-icon">📊</span>
-              <div>
-                <h3>2. Behavioral Pattern Analyzer</h3>
-                <p class="card-subtitle">Repeat visitor frequency, time-of-day anomalies & trend forecasts</p>
-              </div>
-            </div>
-          </div>
+        <!-- Full-Width Emergency SOS Button -->
+        <button class="sos-btn" id="btn-main-sos" aria-label="Emergency SOS panic button">
+          <span>🚨</span> <span>EMERGENCY SOS</span>
+        </button>
+      </section>
 
-          <div class="pattern-stats-row">
-            <div class="pattern-stat-box">
-              <span class="stat-num text-amber">3 Visits</span>
-              <span class="stat-desc">Repeat Unknown Visitor (Night)</span>
-            </div>
-            <div class="pattern-stat-box">
-              <span class="stat-num text-blue">2:00 AM</span>
-              <span class="stat-desc">Peak Time-of-Day Anomaly</span>
-            </div>
-            <div class="pattern-stat-box">
-              <span class="stat-num text-green">2-3 PM</span>
-              <span class="stat-desc">Predictive Delivery Window</span>
-            </div>
-          </div>
+      <!-- CARD 4: PATTERN ANALYSIS (SPAN 2 COLS DESKTOP) -->
+      <section class="card span-2-desk" aria-label="Behavioral Pattern Analysis">
+        <div class="card-header-styled">
+          <div class="card-title">📊 Pattern Analysis (7-Day)</div>
+          <span class="card-subtitle">Repeat Visitors & Anomaly Detection</span>
+        </div>
 
-          <!-- Time-of-Day Activity Bar Graph -->
-          <div class="hourly-chart-wrapper">
-            <div class="chart-title">Household 24-Hour Activity Baseline vs Anomalies</div>
-            <div class="hourly-bars" id="hourly-bars-container">
+        <div class="pattern-content">
+          <!-- 7-Day Visitor Frequency Histogram -->
+          <div class="pattern-chart-wrapper">
+            <div class="mini-chart-title">7-Day Household Visitor Frequency vs. 2:00 AM Anomaly</div>
+            <div class="mini-bars" id="pattern-bars-container">
               <!-- Rendered via JS -->
             </div>
-            <div class="chart-legend">
-              <span class="legend-item"><span class="legend-swatch normal"></span> Normal Baseline</span>
-              <span class="legend-item"><span class="legend-swatch anomaly"></span> Late-Night Anomaly</span>
-            </div>
           </div>
 
-          <!-- Feature 8: Visitor Recognition History -->
-          <div class="visitor-history-section">
-            <div class="chart-title">8. Visitor Recognition History (Rekognition)</div>
-            <div class="visitor-list" id="visitor-list-container">
-              <div class="visitor-item suspicious">
-                <div class="visitor-thumb prowler">👤</div>
-                <div class="visitor-details">
-                  <div class="visitor-header">
-                    <strong>Unknown Male (Prowler)</strong>
-                    <span class="visit-count-tag danger">3 visits this week</span>
-                  </div>
-                  <div class="visitor-meta">First: Oct 18, 11:20 PM • Last: Today, 11:47 PM (Backyard)</div>
-                </div>
-              </div>
-              <div class="visitor-item safe">
-                <div class="visitor-thumb delivery">📦</div>
-                <div class="visitor-details">
-                  <div class="visitor-header">
-                    <strong>Regular Courier (Amazon Prime)</strong>
-                    <span class="visit-count-tag safe">5 visits / week</span>
-                  </div>
-                  <div class="visitor-meta">Consistent window: 2:15 PM – 3:00 PM • Front Doorbell</div>
-                </div>
-              </div>
+          <div class="pattern-item">
+            <div>
+              <strong style="color:var(--text-primary);display:block;">• Unknown male (Repeat Visitor)</strong>
+              <span style="font-size:var(--fs-xs);color:var(--text-muted);">5 visits this week (All 10 PM – 2 AM window)</span>
             </div>
+            <span class="threat-badge critical">ANOMALY</span>
           </div>
 
-        </div>
-
-        <!-- Feature 5: Proactive Security Recommendations -->
-        <div class="card recommender-card" aria-label="Proactive Security Recommendations">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="card-icon">💡</span>
-              <div>
-                <h3>5. Proactive Security Recommendations</h3>
-                <p class="card-subtitle">Context, seasonal, weather & travel-aware intelligence</p>
-              </div>
+          <div class="pattern-item">
+            <div>
+              <strong style="color:var(--text-primary);display:block;">• Regular Mail Carrier (Amazon / USPS)</strong>
+              <span style="font-size:var(--fs-xs);color:var(--text-muted);">3 visits (Consistent 9:00 AM – 11:00 AM window)</span>
             </div>
+            <span class="threat-badge low">NORMAL</span>
           </div>
-          <div class="recs-list" id="recs-list-container">
-            <div class="rec-item urgent">
-              <div class="rec-icon">🌙</div>
-              <div class="rec-content">
-                <strong>Context-Aware: Perimeter Lock Advisory</strong>
-                <p>It's 11 PM and your back door is unlocked. Want SafeGuard to lock it now?</p>
-                <div class="rec-actions">
-                  <button class="btn-xs btn-primary">Lock Back Door</button>
-                  <button class="btn-xs btn-ghost">Dismiss</button>
-                </div>
-              </div>
+
+          <div class="pattern-item">
+            <div>
+              <strong style="color:var(--text-primary);display:block;">• Time-of-Day Anomaly Flag</strong>
+              <span style="font-size:var(--fs-xs);color:var(--text-muted);">Activity detected at 2:00 AM — outside household baseline</span>
             </div>
-            <div class="rec-item info">
-              <div class="rec-icon">🎁</div>
-              <div class="rec-content">
-                <strong>Seasonal Awareness: Holiday Package Guard</strong>
-                <p>Package theft increases 300% in December. Consider enabling Package Guard with auto-chime.</p>
-                <div class="rec-actions">
-                  <button class="btn-xs btn-secondary">Enable Package Guard</button>
-                </div>
-              </div>
-            </div>
-            <div class="rec-item subtle">
-              <div class="rec-icon">🌧️</div>
-              <div class="rec-content">
-                <strong>Weather-Based: Storm Sensitivity Tuning</strong>
-                <p>Heavy rain expected tonight. Ring Floodlight motion sensitivity optimized to avoid false branch alerts.</p>
-              </div>
-            </div>
+            <span class="threat-badge medium">FLAGGED</span>
           </div>
         </div>
-
       </section>
 
-      <!-- Column 3: Alexa Voice Simulator, Multi-Camera View, Geofence & Emergency -->
-      <section class="col-right">
-
-        <!-- Feature 4: Alexa Cross-Device Voice Integration Simulator -->
-        <div class="card alexa-card" aria-label="Alexa Voice Integration">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="alexa-ring-icon"></span>
-              <div>
-                <h3>4. Alexa Cross-Device Voice Integration</h3>
-                <p class="card-subtitle">5 Voice Intents with Proactive Voice Announcements</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="alexa-body">
-            <!-- Simulated Echo Show Visual Display Card -->
-            <div class="echo-show-frame">
-              <div class="echo-glass">
-                <div class="echo-header">
-                  <span class="echo-time">11:47 PM</span>
-                  <span class="echo-skill">SafeGuard AI</span>
-                </div>
-                <div class="echo-card-content" id="echo-display-card">
-                  <div class="echo-card-title" id="echo-card-title">Echo Show Display Preview</div>
-                  <p class="echo-card-text" id="echo-card-text">
-                    Ask Alexa any of the 5 intents below to see visual cards and hear native voice synthesis.
-                  </p>
-                  <div class="echo-soundwave" id="echo-soundwave">
-                    <span></span><span></span><span></span><span></span><span></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Voice Intent Buttons -->
-            <div class="voice-intent-buttons">
-              <button class="btn-voice" data-intent="whos_at_door">
-                🎙️ "Alexa, who's at my door?"
-              </button>
-              <button class="btn-voice" data-intent="is_family_safe">
-                🎙️ "Alexa, is my family safe?"
-              </button>
-              <button class="btn-voice" data-intent="what_happened_last_night">
-                🎙️ "Alexa, what happened last night?"
-              </button>
-              <button class="btn-voice" data-intent="security_report">
-                🎙️ "Alexa, show my security report"
-              </button>
-              <button class="btn-voice" data-intent="arm_safeguard">
-                🎙️ "Alexa, arm SafeGuard"
-              </button>
-            </div>
-
-            <!-- Spoken Response Transcription Box -->
-            <div class="alexa-speech-box">
-              <span class="alexa-speaker-tag">Alexa Response:</span>
-              <p id="alexa-speech-output" class="alexa-speech-text">
-                "SafeGuard standing by. Ask me who's at the door, check family safety, or ask for your weekly report."
-              </p>
-            </div>
+      <!-- CARD 5: MULTI-CAMERA UNIFIED VIEW (SPAN 2 COLS DESKTOP) -->
+      <section class="card span-2-desk" aria-label="Multi-Camera Unified View">
+        <div class="card-header-styled">
+          <div class="card-title">📹 Multi-Camera Unified View</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <label style="font-size:var(--fs-xs);color:var(--text-muted);display:flex;align-items:center;gap:4px;cursor:pointer;">
+              <input type="checkbox" id="chk-night-mode-toggle" checked>
+              <span>🌙 Night Vision</span>
+            </label>
           </div>
         </div>
 
-        <!-- Feature 12: Multi-Camera Unified View & Feature 11: Night Mode -->
-        <div class="card cameras-card" aria-label="Multi-Camera Unified View">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="card-icon">📹</span>
-              <div>
-                <h3>12. Multi-Camera Unified View</h3>
-                <p class="card-subtitle">4 Synchronized Ring Feeds & Night Lighting</p>
-              </div>
+        <div class="cameras-grid">
+          <!-- Camera 1 -->
+          <div class="cam-tile">
+            <div class="cam-tile-header">
+              <span>Front Doorbell Pro 2</span>
+              <span class="cam-badge live">LIVE</span>
             </div>
-            <div class="night-mode-toggle">
-              <label class="switch-label" title="Toggle Floodlight & Enhanced Night Vision">
-                <span>🌙 Night Mode:</span>
-                <input type="checkbox" id="chk-night-mode" checked>
-                <span class="switch-slider"></span>
-              </label>
+            <div class="cam-tile-body front-door">
+              <span class="cam-overlay-name">FRONT ENTRANCE</span>
+              <span class="cam-status-pill">🔋 94%</span>
             </div>
           </div>
 
-          <div class="cameras-grid">
-            <!-- Cam 1: Front Doorbell -->
-            <div class="cam-feed-tile active">
-              <div class="feed-header">
-                <span class="feed-name">Front Doorbell Pro 2</span>
-                <span class="feed-badge live">LIVE</span>
-              </div>
-              <div class="feed-viewport front-door">
-                <div class="feed-overlay-text">FRONT ENTRANCE</div>
-                <div class="battery-tag">🔋 94%</div>
-              </div>
+          <!-- Camera 2 -->
+          <div class="cam-tile threat-active">
+            <div class="cam-tile-header">
+              <span>Backyard Floodlight</span>
+              <span class="cam-badge danger">THREAT</span>
             </div>
-
-            <!-- Cam 2: Backyard Floodlight -->
-            <div class="cam-feed-tile warning">
-              <div class="feed-header">
-                <span class="feed-name">Backyard Floodlight</span>
-                <span class="feed-badge danger">THREAT</span>
-              </div>
-              <div class="feed-viewport backyard">
-                <div class="feed-overlay-text">BACKYARD PERIMETER</div>
-                <div class="floodlight-tag active">💡 Floodlight ON</div>
-              </div>
+            <div class="cam-tile-body backyard">
+              <span class="cam-overlay-name">BACK PERIMETER</span>
+              <span class="cam-status-pill" style="color:#fbbf24;border:1px solid #fbbf24;">💡 Siren Ready</span>
             </div>
+          </div>
 
-            <!-- Cam 3: Driveway Spotlight -->
-            <div class="cam-feed-tile">
-              <div class="feed-header">
-                <span class="feed-name">Driveway Spotlight Cam</span>
-                <span class="feed-badge ok">SECURE</span>
-              </div>
-              <div class="feed-viewport driveway">
-                <div class="feed-overlay-text">DRIVEWAY & GARAGE</div>
-                <div class="battery-tag">🔋 88%</div>
-              </div>
+          <!-- Camera 3 -->
+          <div class="cam-tile">
+            <div class="cam-tile-header">
+              <span>Driveway Spotlight Cam</span>
+              <span class="cam-badge live">SECURE</span>
             </div>
+            <div class="cam-tile-body driveway">
+              <span class="cam-overlay-name">GARAGE & DRIVEWAY</span>
+              <span class="cam-status-pill">🔋 88%</span>
+            </div>
+          </div>
 
-            <!-- Cam 4: Grandma's Living Room -->
-            <div class="cam-feed-tile elder-tile">
-              <div class="feed-header">
-                <span class="feed-name">Grandma's Living Room</span>
-                <span class="feed-badge alert">WELLNESS</span>
-              </div>
-              <div class="feed-viewport grandma-room">
-                <div class="feed-overlay-text">MEERA'S HOUSE</div>
-                <div class="battery-tag">🔌 Wired</div>
-              </div>
+          <!-- Camera 4 -->
+          <div class="cam-tile">
+            <div class="cam-tile-header">
+              <span>Grandma's Living Room</span>
+              <span class="cam-badge wellness">WELLNESS</span>
+            </div>
+            <div class="cam-tile-body grandma-room">
+              <span class="cam-overlay-name">MEERA RESIDENCE</span>
+              <span class="cam-status-pill">🔌 Wired</span>
             </div>
           </div>
         </div>
-
-        <!-- Feature 9: Geofence Family Tracking & Feature 10: Emergency Response Panel -->
-        <div class="card security-controls-card">
-          <div class="card-header-styled">
-            <div class="header-left">
-              <span class="card-icon">📍</span>
-              <div>
-                <h3>9. Geofence Family Tracking & 10. Emergency Panel</h3>
-                <p class="card-subtitle">Safe zones, 911 dispatch status, and one-tap lockdown</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Geofence Visualizer -->
-          <div class="geofence-radar">
-            <div class="radar-circle circle-1"></div>
-            <div class="radar-circle circle-2"></div>
-            <div class="radar-pin home" title="Home: Priya & Aarav Inside">
-              <span>🏠 Home (Perimeter Secured)</span>
-            </div>
-            <div class="radar-pin school" title="Oakridge Elementary: Aarav Cleared at 3:00 PM">
-              <span>🏫 School</span>
-            </div>
-            <div class="radar-pin grandma" title="Grandma's House: 4.2 miles away">
-              <span>👵 Grandma's House</span>
-            </div>
-          </div>
-
-          <!-- Emergency Response Action Buttons -->
-          <div class="emergency-action-panel">
-            <button class="btn-control-danger" id="btn-lockdown">
-              🔒 Immediate Full Lockdown
-            </button>
-            <button class="btn-control-warning" id="btn-sirens">
-              📢 Sound All Floodlight Sirens (110dB)
-            </button>
-            <button class="btn-control-secondary" id="btn-dispatch-test">
-              🛡️ Check 911 Emergency Escalation Chain
-            </button>
-          </div>
-        </div>
-
       </section>
 
+      <!-- CARD 6: ALEXA VOICE SIMULATOR (SPAN 2 COLS DESKTOP) -->
+      <section class="card span-2-desk alexa-simulator-card" aria-label="Alexa Voice Integration">
+        <div class="card-header-styled">
+          <div class="card-title">🎙️ Alexa Cross-Device Voice Integration</div>
+          <span class="card-subtitle">5 Voice Intents & Echo Show Directives</span>
+        </div>
+
+        <!-- Echo Show Glass Preview Frame -->
+        <div class="echo-show-preview">
+          <div class="echo-topline">
+            <span id="echo-clock">11:47 PM</span>
+            <span>Echo Show 15 • SafeGuard Skill</span>
+          </div>
+          <div class="echo-card-title" id="echo-card-title">Echo Show Display Card</div>
+          <p class="echo-card-body" id="echo-card-body">
+            Ask Alexa any intent below to see the multi-modal card and listen to real-time speech synthesis.
+          </p>
+          <div class="echo-wave" id="echo-wave">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <!-- 5 Voice Intent Triggers -->
+        <div class="voice-intent-grid">
+          <button class="btn-voice-intent" data-intent="whos_at_door">
+            🎙️ "Alexa, who's at my door?"
+          </button>
+          <button class="btn-voice-intent" data-intent="is_family_safe">
+            🎙️ "Alexa, is my family safe?"
+          </button>
+          <button class="btn-voice-intent" data-intent="what_happened_last_night">
+            🎙️ "Alexa, what happened last night?"
+          </button>
+          <button class="btn-voice-intent" data-intent="security_report">
+            🎙️ "Alexa, show my security report"
+          </button>
+          <button class="btn-voice-intent" data-intent="arm_safeguard">
+            🎙️ "Alexa, arm SafeGuard"
+          </button>
+        </div>
+
+        <div class="alexa-transcript-box">
+          <strong>Alexa Response:</strong>
+          <span id="alexa-speech-text">"SafeGuard standing by. Ask who is at the door or check family safety."</span>
+        </div>
+      </section>
+
+      <!-- CARD 7: PROACTIVE RECOMMENDATIONS & RADAR (SPAN 2 COLS DESKTOP) -->
+      <section class="card span-2-desk" aria-label="Proactive Security Recommendations">
+        <div class="card-header-styled">
+          <div class="card-title">💡 Proactive Security Recommendations</div>
+          <span class="card-subtitle">Context, Seasonal & Weather-Aware</span>
+        </div>
+
+        <div>
+          <div class="rec-card-item urgent">
+            <span class="rec-icon">🌙</span>
+            <div class="rec-text">
+              <strong>Context-Aware: Perimeter Lock Advisory</strong>
+              <p>It's 11 PM and your back door is unlocked. Want SafeGuard to lock it now?</p>
+              <button class="rec-btn-action" id="btn-rec-lock">Lock Back Door</button>
+            </div>
+          </div>
+
+          <div class="rec-card-item">
+            <span class="rec-icon">🎁</span>
+            <div class="rec-text">
+              <strong>Seasonal Awareness: Holiday Package Guard</strong>
+              <p>Package theft increases 300% in December. Enable floodlight auto-chime to deter porch pirates.</p>
+              <button class="rec-btn-action" style="background:var(--bg-surface);border:1px solid var(--border);color:var(--text-secondary);" id="btn-rec-guard">Enable Package Guard</button>
+            </div>
+          </div>
+
+          <div class="rec-card-item">
+            <span class="rec-icon">🌧️</span>
+            <div class="rec-text">
+              <strong>Weather-Based: Storm Sensitivity Auto-Tuning</strong>
+              <p>Heavy rain detected. Ring Floodlight motion sensitivity optimized to eliminate branch false alerts.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MOBILE FLOATING SOS BAR (VISIBLE ON MOBILE ONLY) -->
+    <div class="mobile-sos-bar">
+      <button class="sos-btn" id="btn-mobile-sos" aria-label="Emergency SOS">
+        <span>🚨</span> <span>EMERGENCY SOS</span>
+      </button>
     </div>
-  </main>
 
-  <!-- Live Toast Notification Container -->
-  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+    <!-- MOBILE BOTTOM NAVIGATION (56px, 5 TABS) -->
+    <nav class="bottom-nav" aria-label="Mobile Navigation">
+      <button class="nav-tab active" data-tab="dashboard">
+        <span class="icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-tab" data-tab="patterns">
+        <span class="icon">📊</span>
+        <span>Patterns</span>
+      </button>
+      <button class="nav-tab" data-tab="family">
+        <span class="icon">👨‍👩‍👧</span>
+        <span>Family</span>
+      </button>
+      <button class="nav-tab" data-tab="alexa">
+        <span class="icon">🎙️</span>
+        <span>Voice</span>
+      </button>
+      <button class="nav-tab" data-tab="settings">
+        <span class="icon">⚙️</span>
+        <span>Settings</span>
+      </button>
+    </nav>
 
-  <!-- Audio elements for accessibility tones -->
-  <audio id="audio-critical" preload="auto"></audio>
-  <audio id="audio-medium" preload="auto"></audio>
-  <audio id="audio-safe" preload="auto"></audio>
+  </div>
+
+  <!-- Screen Reader Live Announcer -->
+  <div id="screen-reader-announcer" class="sr-only" aria-live="assertive"></div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>
