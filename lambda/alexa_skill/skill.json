@@ -1,0 +1,40 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "AI-powered Ring security intelligence for your smart home.",
+          "examplePhrases": [
+            "Alexa, ask SafeGuard who's at my door",
+            "Alexa, ask SafeGuard is my family safe",
+            "Alexa, ask SafeGuard for my security report"
+          ],
+          "name": "SafeGuard Ring Intelligence",
+          "description": "SafeGuard transforms raw Ring events into contextual threat assessments, family safety checks, and proactive voice alerts."
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample invocation: Alexa, ask SafeGuard who's at my door.",
+      "category": "SMART_HOME",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "arn:aws:lambda:us-east-1:123456789012:function:safeguard-alexa-skill"
+        },
+        "interfaces": [
+          {
+            "type": "ALEXA_PRESENTATION_APL"
+          }
+        ]
+      }
+    },
+    "manifestVersion": "1.0",
+    "permissions": [
+      {
+        "name": "alexa::devices:all:notifications:write"
+      }
+    ]
+  }
+}

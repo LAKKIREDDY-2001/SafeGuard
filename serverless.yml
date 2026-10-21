@@ -1,0 +1,178 @@
+service: safeguard-ring-platform
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'prod'}
+  memorySize: 512
+  timeout: 15
+  environment:
+    BEDROCK_MODEL_ID: anthropic.claude-3-haiku-20240307-v1:0
+    REKOGNITION_COLLECTION_ID: safeguard-family-faces
+    DYNAMODB_EVENTS_TABLE: !Ref EventsTable
+    DYNAMODB_PATTERNS_TABLE: !Ref PatternsTable
+    DYNAMODB_FAMILY_TABLE: !Ref FamilyProfilesTable
+    DYNAMODB_SETTINGS_TABLE: !Ref SettingsTable
+    SNS_CRITICAL_TOPIC_ARN: !Ref CriticalAlertsTopic
+    SNS_MEDIUM_TOPIC_ARN: !Ref MediumAlertsTopic
+    SNS_DIGEST_TOPIC_ARN: !Ref DigestAlertsTopic
+    SAFEGUARD_OFFLINE_MOCK_MODE: "false"
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - bedrock:InvokeModel
+            - bedrock:InvokeModelWithResponseStream
+          Resource: "arn:aws:bedrock:*::foundation-model/anthropic.claude-3-haiku-20240307-v1:0"
+        - Effect: Allow
+          Action:
+            - rekognition:SearchFacesByImage
+            - rekognition:DetectLabels
+            - rekognition:IndexFaces
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource:
+            - !GetAtt EventsTable.Arn
+            - !GetAtt PatternsTable.Arn
+            - !GetAtt FamilyProfilesTable.Arn
+            - !GetAtt SettingsTable.Arn
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource:
+            - !Ref CriticalAlertsTopic
+            - !Ref MediumAlertsTopic
+            - !Ref DigestAlertsTopic
+
+functions:
+  eventProcessor:
+    handler: lambda/event_processor/handler.lambda_handler
+    description: Ingests Ring events, triggers Bedrock + Rekognition threat analysis, and routes alerts
+    provisionedConcurrency: 1  # Eliminates cold start for real-time alerts (Friction Log #9)
+    events:
+      - http:
+          path: /events
+          method: post
+          cors: true
+
+  dashboardApi:
+    handler: lambda/api/dashboard_api.lambda_handler
+    description: REST API for real-time dashboard telemetry, KPIs, and live demo triggers
+    events:
+      - http:
+          path: /api/dashboard
+          method: get
+          cors: true
+      - http:
+          path: /api/simulate
+          method: post
+          cors: true
+      - http:
+          path: /api/emergency-sos
+          method: post
+          cors: true
+
+  familyApi:
+    handler: lambda/api/family_api.lambda_handler
+    description: Family profile management and elder wellness checks
+    events:
+      - http:
+          path: /family
+          method: any
+          cors: true
+
+  settingsApi:
+    handler: lambda/api/settings_api.lambda_handler
+    description: User preferences, quiet hours, and multi-language settings
+    events:
+      - http:
+          path: /settings
+          method: any
+          cors: true
+
+  alexaSkill:
+    runtime: nodejs18.x
+    handler: lambda/alexa_skill/lambda/index.handler
+    description: Alexa Skills Kit voice intent handler (5 voice intents)
+    events:
+      - alexaSkill: amzn1.ask.skill.12345678-1234-1234-1234-123456789012
+
+resources:
+  Resources:
+    EventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: safeguard-events-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+
+    PatternsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: safeguard-patterns-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: visitor_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: visitor_id
+            KeyType: HASH
+
+    FamilyProfilesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: safeguard-family-profiles-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: member_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: member_id
+            KeyType: HASH
+
+    SettingsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: safeguard-user-preferences-${self:provider.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user_id
+            KeyType: HASH
+
+    CriticalAlertsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: safeguard-critical-alerts-${self:provider.stage}
+
+    MediumAlertsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: safeguard-medium-alerts-${self:provider.stage}
+
+    DigestAlertsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: safeguard-daily-digests-${self:provider.stage}

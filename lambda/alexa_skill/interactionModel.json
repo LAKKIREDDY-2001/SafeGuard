@@ -1,0 +1,81 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "safeguard",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "help",
+            "what can I ask you"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "WhosAtMyDoorIntent",
+          "slots": [],
+          "samples": [
+            "who's at my door",
+            "who is at my door",
+            "who is at the front door",
+            "check front door",
+            "who just rang the doorbell",
+            "is someone outside"
+          ]
+        },
+        {
+          "name": "ShowSecurityReportIntent",
+          "slots": [],
+          "samples": [
+            "show my security report",
+            "show security report",
+            "security summary",
+            "give me my weekly report",
+            "how is my home security"
+          ]
+        },
+        {
+          "name": "IsFamilySafeIntent",
+          "slots": [],
+          "samples": [
+            "is my family safe",
+            "family status",
+            "check on grandma",
+            "is grandma okay",
+            "where is Aarav",
+            "did Aarav get home"
+          ]
+        },
+        {
+          "name": "ArmSafeGuardIntent",
+          "slots": [],
+          "samples": [
+            "arm SafeGuard",
+            "activate enhanced monitoring",
+            "turn on travel mode",
+            "lockdown home",
+            "arm perimeter"
+          ]
+        },
+        {
+          "name": "WhatHappenedLastNightIntent",
+          "slots": [],
+          "samples": [
+            "what happened last night",
+            "overnight summary",
+            "any activity while I was asleep",
+            "did anything happen last night",
+            "check overnight events"
+          ]
+        }
+      ]
+    }
+  }
+}

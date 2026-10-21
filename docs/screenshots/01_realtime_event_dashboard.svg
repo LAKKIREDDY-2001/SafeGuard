@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0d14"/>
+      <stop offset="50%" stop-color="#111622"/>
+      <stop offset="100%" stop-color="#161c2d"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0080ff"/>
+      <stop offset="100%" stop-color="#00d2ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)" rx="12"/>
+  <rect x="20" y="20" width="760" height="410" fill="none" stroke="#26324a" stroke-width="2" rx="10"/>
+  <circle cx="60" cy="55" r="16" fill="#0080ff" opacity="0.2"/>
+  <text x="60" y="61" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="18" fill="#00d2ff" text-anchor="middle">🛡️</text>
+  <text x="90" y="60" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="20" font-weight="700" fill="#f1f5f9">SafeGuard <tspan fill="#0080ff">Ring AI</tspan></text>
+  <line x1="20" y1="85" x2="780" y2="85" stroke="#1d263b" stroke-width="1.5"/>
+  <rect x="50" y="120" width="700" height="260" fill="#0c101a" stroke="#26324a" stroke-width="1.5" rx="8"/>
+  <text x="400" y="190" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="700" fill="#f1f5f9" text-anchor="middle">Real-Time Event Dashboard</text>
+  <text x="400" y="230" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">Ring Stream -> Lambda Ingestion -> 95% Noise Filtering</text>
+  <rect x="250" y="270" width="300" height="42" fill="url(#cyanGrad)" rx="6"/>
+  <text x="400" y="297" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">SHOWCASE LIVE COMPONENT</text>
+  <text x="400" y="410" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="#64748b" text-anchor="middle">Amazon Developer Hackathon 2026 • Architect: Venkata Madhava Reddy</text>
+</svg>
