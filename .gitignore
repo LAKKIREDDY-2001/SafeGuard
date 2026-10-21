@@ -41,3 +41,6 @@ ENV/
 
 # Serverless
 .serverless/
+
+# Archives
+*.zip
