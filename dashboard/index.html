@@ -79,6 +79,12 @@
       </div>
 
       <div class="topbar-right">
+        <!-- Smart Locks Quick Status & Toggle Button -->
+        <button id="btn-topbar-lock-toggle" class="btn-topbar-lock unlocked" type="button" title="Smart Deadbolts Status (Click to Secure or Toggle)">
+          <span id="topbar-lock-icon">🔓</span>
+          <span id="topbar-lock-text">1 Door Unlocked</span>
+        </button>
+
         <!-- 5-Language Selector -->
         <select id="lang-select" class="lang-select-top" aria-label="Choose Language">
           <option value="en">🌐 English (US)</option>
@@ -370,6 +376,132 @@
             </div>
           </section>
         </div>
+
+        <!-- Smart Deadbolts & Perimeter Entry Locks Console -->
+        <section class="smart-locks-panel" id="smart-locks-console" aria-label="Smart Deadbolts Console">
+          <div class="smart-locks-header">
+            <div class="smart-locks-title-wrap">
+              <div class="smart-locks-heading">
+                <span>🔐</span>
+                <span>Smart Deadbolts & Entry Locks</span>
+                <span class="threat-badge medium" id="smart-locks-global-badge">1 Unlocked</span>
+              </div>
+              <span class="smart-locks-sub">Z-Wave Plus & Matter smart deadbolts synchronized with Ring Alarm Base Station</span>
+            </div>
+            <div class="smart-locks-global-actions">
+              <button class="btn-global-lock" id="btn-secure-all-doors" type="button" title="Engage motorized deadbolt on all exterior entries">
+                <span>🔒</span> <span>Secure All Doors</span>
+              </button>
+              <button class="btn-global-unlock" id="btn-unlock-all-doors" type="button" title="Unlock all entry doors (Safeguard Protected)">
+                <span>🔓</span> <span>Unlock All</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="locks-grid">
+            <!-- Door 1: Front Door -->
+            <div class="lock-card" id="lock-card-front" data-door="frontDoor">
+              <div class="lock-card-header">
+                <div class="lock-card-info">
+                  <div class="lock-name">
+                    <span>🚪</span> <span>Front Door Pro Deadbolt</span>
+                  </div>
+                  <span class="lock-location">Front Porch • Main Entry</span>
+                </div>
+                <span class="lock-status-badge locked" id="badge-frontDoor">🔒 Locked</span>
+              </div>
+              <div class="lock-card-body">
+                <div class="lock-detail-row">
+                  <span>Battery Status:</span>
+                  <span class="lock-detail-val">🔋 94% • High</span>
+                </div>
+                <div class="lock-detail-row">
+                  <span>Auto-Lock Timer:</span>
+                  <span class="lock-detail-val" style="color:var(--accent);">⚡ 45s Auto-Lock</span>
+                </div>
+                <div class="lock-activity-note" id="activity-frontDoor">
+                  Last activity: Secured via Auto-Lock (3:15 PM)
+                </div>
+              </div>
+              <div class="lock-actions-row">
+                <button type="button" class="btn-lock-action lock-active" data-door-action="lock" data-door-key="frontDoor" id="btn-lock-front">
+                  <span>🔒</span> <span>Lock</span>
+                </button>
+                <button type="button" class="btn-lock-action" data-door-action="unlock" data-door-key="frontDoor" id="btn-unlock-front">
+                  <span>🔓</span> <span>Unlock</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Door 2: Backyard Patio -->
+            <div class="lock-card" id="lock-card-back" data-door="backDoor">
+              <div class="lock-card-header">
+                <div class="lock-card-info">
+                  <div class="lock-name">
+                    <span>🏡</span> <span>Backyard Patio Smart Lock</span>
+                  </div>
+                  <span class="lock-location">Back Patio • Kitchen Deck</span>
+                </div>
+                <span class="lock-status-badge locked" id="badge-backDoor">🔒 Locked</span>
+              </div>
+              <div class="lock-card-body">
+                <div class="lock-detail-row">
+                  <span>Battery Status:</span>
+                  <span class="lock-detail-val">🔋 89% • Good</span>
+                </div>
+                <div class="lock-detail-row">
+                  <span>Auto-Lock Timer:</span>
+                  <span class="lock-detail-val" style="color:var(--accent);">⚡ 60s Auto-Lock</span>
+                </div>
+                <div class="lock-activity-note" id="activity-backDoor">
+                  Last activity: Secured via Schedule (11:00 PM)
+                </div>
+              </div>
+              <div class="lock-actions-row">
+                <button type="button" class="btn-lock-action lock-active" data-door-action="lock" data-door-key="backDoor" id="btn-lock-back">
+                  <span>🔒</span> <span>Lock</span>
+                </button>
+                <button type="button" class="btn-lock-action" data-door-action="unlock" data-door-key="backDoor" id="btn-unlock-back">
+                  <span>🔓</span> <span>Unlock</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Door 3: Garage Side Entry -->
+            <div class="lock-card unlocked" id="lock-card-garage" data-door="garageDoor">
+              <div class="lock-card-header">
+                <div class="lock-card-info">
+                  <div class="lock-name">
+                    <span>🚗</span> <span>Garage Side Entry Deadbolt</span>
+                  </div>
+                  <span class="lock-location">Mudroom • Garage Access</span>
+                </div>
+                <span class="lock-status-badge unlocked" id="badge-garageDoor">🔓 Unlocked</span>
+              </div>
+              <div class="lock-card-body">
+                <div class="lock-detail-row">
+                  <span>Battery Status:</span>
+                  <span class="lock-detail-val">🔋 91% • High</span>
+                </div>
+                <div class="lock-detail-row">
+                  <span>Auto-Lock Timer:</span>
+                  <span class="lock-detail-val" style="color:var(--threat-medium);">⚡ 30s Countdown</span>
+                </div>
+                <div class="lock-activity-note" id="activity-garageDoor">
+                  Last activity: Unlocked by Rahul at 6:45 PM
+                </div>
+              </div>
+              <div class="lock-actions-row">
+                <button type="button" class="btn-lock-action" data-door-action="lock" data-door-key="garageDoor" id="btn-lock-garage">
+                  <span>🔒</span> <span>Lock</span>
+                </button>
+                <button type="button" class="btn-lock-action unlock-active" data-door-action="unlock" data-door-key="garageDoor" id="btn-unlock-garage">
+                  <span>🔓</span> <span>Unlock</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- 3 Quick Glance Cards -->
         <div class="dashboard-quick-glance">
@@ -678,14 +810,15 @@
               <span class="cam-badge live">LIVE HD</span>
             </div>
             <div class="camera-viewport-large front-door" id="cam-box-front" data-cam="doorbell_front" title="Click to Watch Live HD Stream & 2-Way Audio">
-              <span class="cam-feed-label">FRONT ENTRANCE • DEADBOLT LOCKED</span>
+              <span class="cam-feed-label" id="cam-front-door-lock-badge">FRONT ENTRANCE • DEADBOLT LOCKED</span>
               <span class="cam-telemetry-badge">🔋 94% • Wi-Fi -52dBm</span>
             </div>
             <div class="camera-controls-bar">
               <button class="btn-cam-ctrl" data-cam-action="talk" data-cam="doorbell_front">🎙️ Talk</button>
               <button class="btn-cam-ctrl" data-cam-action="doorbell-ring" data-cam="doorbell_front" style="color:#00D2FF;font-weight:700;">🔔 Ring Chime</button>
               <button class="btn-cam-ctrl" data-cam-action="stream" data-cam="doorbell_front">🎥 Live Stream</button>
-              <button class="btn-cam-ctrl" data-cam-action="unlock">🔓 Unlock</button>
+              <button class="btn-cam-ctrl" data-cam-action="lock" data-door="frontDoor" id="btn-cam-lock-front">🔒 Lock</button>
+              <button class="btn-cam-ctrl" data-cam-action="unlock" data-door="frontDoor" id="btn-cam-unlock-front">🔓 Unlock</button>
             </div>
           </div>
 
@@ -1246,7 +1379,8 @@
         </div>
         <div class="forensic-actions-col">
           <button type="button" class="btn-ai-action" id="btn-forensic-alert" style="background:#EF4444;color:#fff;">🚨 Alert Priya</button>
-          <button type="button" class="btn-ai-secondary" id="btn-forensic-lock">🔒 Lock Door</button>
+          <button type="button" class="btn-ai-action" id="btn-forensic-lock" data-door="frontDoor" title="Engage front deadbolt">🔒 Lock Door</button>
+          <button type="button" class="btn-ai-secondary" id="btn-forensic-unlock" data-door="frontDoor" title="Unlock front deadbolt">🔓 Unlock</button>
         </div>
       </div>
     </div>
@@ -1276,6 +1410,15 @@
       <!-- Audio Frequency Waveform Visualizer -->
       <div class="intercom-waveform-box">
         <canvas id="intercom-wave-canvas" width="400" height="50"></canvas>
+      </div>
+
+      <!-- Quick Door Lock / Unlock Control -->
+      <div class="intercom-door-controls">
+        <span class="intercom-door-label">🚪 Front Entry Deadbolt:</span>
+        <div class="intercom-door-btns">
+          <button type="button" class="btn-intercom-door lock active" id="btn-intercom-lock" data-door="frontDoor" title="Engage Front Deadbolt">🔒 Lock Door</button>
+          <button type="button" class="btn-intercom-door unlock" id="btn-intercom-unlock" data-door="frontDoor" title="Unlock Front Entry">🔓 Unlock Entry</button>
+        </div>
       </div>
 
       <!-- Quick Canned Voice Responses / Whisper Nudges -->

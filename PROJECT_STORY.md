@@ -41,6 +41,10 @@ SafeGuard sits between raw Ring events and the homeowner's smart ecosystem:
 5. **Authentic Acoustic Ring Chime & Emergency Dispatch**:
    * Synthesized acoustic dual-harmonic Ring Chime Pro sound via Web Audio API.
    * One-touch emergency dispatch console broadcasting SMS alerts via AWS SNS, APNs push with camera snapshots, and household Alexa Guard announcements.
+6. **Perimeter Smart Deadbolts & Motorized Acoustic Simulation**:
+   * Synchronized Z-Wave Plus & Matter smart deadbolts across Front Door, Backyard Patio, and Garage entries.
+   * Realistic acoustic physical simulation of motorized deadbolt engagement (frequency down-slide + metallic dual-latch strike) and retraction via Web Audio API.
+   * Cross-surface touchpoints: topbar quick status badge, dashboard Entry Console with 1-tap master secure, live camera feed controls, forensic video player, and two-way intercom call screen.
 
 ---
 
