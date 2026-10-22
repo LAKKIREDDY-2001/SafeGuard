@@ -1,7 +1,7 @@
 """REST API for SafeGuard Web Dashboard and Live Demonstration."""
 
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import random
 from typing import Any, Dict
 import os
@@ -31,7 +31,7 @@ def get_dashboard_data() -> Dict[str, Any]:
 
     # Pre-populate sample events if store is empty for instant showcase
     if not recent_events:
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         sample_records = [
             {
                 "event_id": "evt_demo_101",
@@ -122,7 +122,7 @@ def get_dashboard_data() -> Dict[str, Any]:
         "family": family,
         "visitor_patterns": patterns,
         "settings": settings,
-        "timestamp": datetime.utcnow().isoformat() + "Z"
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }
 
 
@@ -165,34 +165,73 @@ def lambda_handler(event: Dict[str, Any], context: Any = None) -> Dict[str, Any]
     return {"statusCode": 404, "headers": headers, "body": json.dumps({"error": "Not Found"})}
 
 
-# Standalone runner for local development and live dashboard preview
-if __name__ == "__main__":
-    from flask import Flask, jsonify, request
+def create_app():
+    """Application factory for SafeGuard Web Dashboard & API Server."""
+    from flask import Flask, jsonify, request, send_from_directory
     from flask_cors import CORS
 
-    app = Flask(__name__)
-    CORS(app)
+    # locate dashboard folder
+    root_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    dashboard_folder = os.path.join(root_folder, "dashboard")
 
-    @app.route("/api/dashboard", methods=["GET"])
+    flask_app = Flask(__name__, static_folder=None)
+    CORS(flask_app)
+
+    @flask_app.route("/health", methods=["GET"])
+    @flask_app.route("/api/health", methods=["GET"])
+    def health_check():
+        return jsonify({
+            "status": "healthy",
+            "service": "SafeGuard AI Security Platform",
+            "version": "1.0.0",
+            "aws_services": ["Bedrock", "DynamoDB", "SNS", "S3", "CloudFront"],
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+
+    @flask_app.route("/api/dashboard", methods=["GET"])
     def dashboard():
         return jsonify(get_dashboard_data())
 
-    @app.route("/api/simulate", methods=["POST"])
+    @flask_app.route("/api/simulate", methods=["POST"])
     def simulate():
         data = request.json or {}
         scenario = data.get("scenario", "aarav_arrival")
         mock_evt = ring.generate_mock_event(scenario)
-        result = processor.process_event(mock_evt.dict())
+        mock_dict = mock_evt.model_dump() if hasattr(mock_evt, "model_dump") else mock_evt.dict()
+        result = processor.process_event(mock_dict)
         return jsonify(result)
 
-    @app.route("/api/emergency-sos", methods=["POST"])
+    @flask_app.route("/api/emergency-sos", methods=["POST"])
     def emergency_sos():
         data = request.json or {}
+        triggered_by = data.get("triggered_by", "Priya Reddy")
+        reason = data.get("reason", "Web Dashboard SOS")
         sos = processor.family_safety.trigger_emergency_sos(
-            triggered_by=data.get("triggered_by", "Priya Reddy"),
-            reason=data.get("reason", "Web Dashboard SOS")
+            triggered_by=triggered_by,
+            reason=reason
         )
-        return jsonify(sos.dict())
+        sos_dict = sos.model_dump() if hasattr(sos, "model_dump") else sos.dict()
+        sos_dict["triggered_by"] = triggered_by
+        return jsonify(sos_dict)
 
-    print("SafeGuard Dashboard API Server running on http://127.0.0.1:5001")
-    app.run(port=5001, debug=True)
+    # Serve static frontend dashboard
+    @flask_app.route("/", defaults={"path": ""})
+    @flask_app.route("/<path:path>")
+    def serve_frontend(path):
+        if path != "" and os.path.exists(os.path.join(dashboard_folder, path)):
+            return send_from_directory(dashboard_folder, path)
+        return send_from_directory(dashboard_folder, "index.html")
+
+    return flask_app
+
+
+# Module-level app instance for WSGI/Gunicorn servers
+app = create_app()
+
+
+# Standalone runner for local development and live dashboard preview
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5001))
+    print(f"SafeGuard Dashboard Server running on http://127.0.0.1:{port}")
+    app.run(host="0.0.0.0", port=port, debug=True)
+

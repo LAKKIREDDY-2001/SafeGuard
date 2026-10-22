@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: safeguard
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SAFEGUARD_OFFLINE_MOCK_MODE
+        value: "true"
+      - key: AWS_DEFAULT_REGION
+        value: "us-east-1"

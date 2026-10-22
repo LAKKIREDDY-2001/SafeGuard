@@ -1,7 +1,7 @@
 """Ring API integration service with rate-limiting, deduplication, and mock event generation."""
 
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import random
 from typing import Any, Dict, List, Optional
 from models.event_models import DeviceType, EventType, RingEvent
@@ -102,7 +102,7 @@ class RingAPIService:
         Generates realistic Ring events for sandbox testing & dashboard demo (Friction Log #10).
         Scenarios: aarav_arrival, grandma_wellness, night_visitor, forced_entry, delivery, normal
         """
-        now_iso = datetime.utcnow().isoformat() + "Z"
+        now_iso = datetime.now(timezone.utc).isoformat()
 
         if scenario == "aarav_arrival":
             return RingEvent(
@@ -117,7 +117,7 @@ class RingAPIService:
             )
         elif scenario == "grandma_wellness":
             # 8 hours in past for wellness check trigger
-            past_time = (datetime.utcnow() - timedelta(hours=8, minutes=15)).isoformat() + "Z"
+            past_time = (datetime.now(timezone.utc) - timedelta(hours=8, minutes=15)).isoformat()
             return RingEvent(
                 event_id=f"evt_elder_{int(time.time())}",
                 device_id="cam_grandma_living",

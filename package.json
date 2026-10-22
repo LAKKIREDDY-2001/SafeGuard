@@ -1,0 +1,21 @@
+{
+  "name": "safeguard",
+  "version": "1.0.0",
+  "description": "SafeGuard — AI-Powered Ring Security Intelligence Platform",
+  "main": "wsgi.py",
+  "scripts": {
+    "start": "python3 wsgi.py",
+    "build": "pip install -r requirements.txt",
+    "test": "pytest tests/ -v"
+  },
+  "keywords": [
+    "safeguard",
+    "ring",
+    "security",
+    "bedrock",
+    "aws",
+    "hackathon"
+  ],
+  "author": "Venkata Madhava Reddy",
+  "license": "Apache-2.0"
+}
