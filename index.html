@@ -505,24 +505,38 @@
 
         <!-- 3 Quick Glance Cards -->
         <div class="dashboard-quick-glance">
-          <!-- Family Glance -->
+          <!-- Family Glance (Named Profile Cards) -->
           <div class="card">
             <div class="card-header-styled">
               <span class="card-title">👨‍👩‍👧 Family Safety Status</span>
               <button class="filter-pill" onclick="switchTab('family')">Open Space →</button>
             </div>
-            <div style="display:flex;flex-direction:column;gap:8px;font-size:var(--fs-xs);">
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span>👦 Aarav (10)</span>
-                <span class="threat-badge low">Home · Locked</span>
+            <div style="display:flex;flex-direction:column;gap:10px;font-size:var(--fs-xs);">
+              <!-- Member 1: Aarav -->
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-elevated);padding:6px 10px;border-radius:6px;border:1px solid var(--border);">
+                <div>
+                  <strong style="color:var(--text-primary);display:block;">👦 Aarav Reddy (10)</strong>
+                  <span style="color:var(--text-muted);font-size:11px;">Arrived 3:15 PM • Front Door Deadbolt Locked</span>
+                </div>
+                <span class="threat-badge low">🟢 Safe at Home</span>
               </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span>👵 Grandma Meera (75)</span>
-                <span class="threat-badge medium">8h No Motion</span>
+
+              <!-- Member 2: Grandma Meera -->
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-elevated);padding:6px 10px;border-radius:6px;border:1px solid rgba(245,158,11,0.3);">
+                <div>
+                  <strong style="color:var(--text-primary);display:block;">👵 Grandma Meera (75)</strong>
+                  <span style="color:var(--text-muted);font-size:11px;">8.2h Inactivity • Echo Drop-In Check Sent</span>
+                </div>
+                <span class="threat-badge medium">🟡 Wellness Check</span>
               </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <span>👩 Priya (38)</span>
-                <span class="threat-badge low">Active at Home</span>
+
+              <!-- Member 3: Priya Reddy -->
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-elevated);padding:6px 10px;border-radius:6px;border:1px solid var(--border);">
+                <div>
+                  <strong style="color:var(--text-primary);display:block;">👩 Priya Reddy (38)</strong>
+                  <span style="color:var(--text-muted);font-size:11px;">Active at Home • Primary Admin Escort</span>
+                </div>
+                <span class="threat-badge low">🟢 Active Admin</span>
               </div>
             </div>
           </div>
@@ -561,6 +575,86 @@
             <button class="btn-ai-action" id="btn-dash-quick-lock">Lock Back Door Now</button>
           </div>
         </div>
+
+        <!-- Security Scorecard & Homeowners Insurance Discount Widget -->
+        <section class="security-scorecard-widget" id="security-scorecard-widget" aria-label="Security Scorecard & Insurance Value">
+          <div class="scorecard-header">
+            <div class="scorecard-header-left">
+              <span style="font-size:24px;">🛡️</span>
+              <div>
+                <div class="scorecard-title">SafeGuard Certified Security Scorecard</div>
+                <div class="scorecard-sub">Underwritten by 30-day continuous zero-false-alarm Ring telemetry & smart lock compliance</div>
+              </div>
+            </div>
+            <div class="scorecard-savings-badge" title="Verified Policyholder Discount">
+              <span>💰</span>
+              <span>Estimated Insurance Savings: $120 / year (12% Discount)</span>
+            </div>
+          </div>
+
+          <div class="scorecard-main-grid">
+            <div class="scorecard-big-score">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Current Rating</div>
+              <div>
+                <span class="big-score-num" id="scorecard-big-num">87</span>
+                <span class="big-score-denom">/100</span>
+              </div>
+              <div class="big-score-trend">↑ +3 pts from last month</div>
+              <div class="big-score-sub">Top 5% Household Safety Tier</div>
+            </div>
+
+            <div class="scorecard-bars-col">
+              <!-- Bar 1: Perimeter Defense -->
+              <div class="score-bar-row">
+                <div class="score-bar-labels">
+                  <span>Perimeter Defense & Ring Coverage</span>
+                  <span class="score-bar-val">95 / 100</span>
+                </div>
+                <div class="score-bar-track">
+                  <div class="score-bar-fill emerald" style="width: 95%;"></div>
+                </div>
+              </div>
+
+              <!-- Bar 2: Motion Response & Rekognition -->
+              <div class="score-bar-row">
+                <div class="score-bar-labels">
+                  <span>Motion & AI Response Time (&lt;1.2s)</span>
+                  <span class="score-bar-val">88 / 100</span>
+                </div>
+                <div class="score-bar-track">
+                  <div class="score-bar-fill cyan" style="width: 88%;"></div>
+                </div>
+              </div>
+
+              <!-- Bar 3: Alert Fatigue & Noise Reduction -->
+              <div class="score-bar-row">
+                <div class="score-bar-labels">
+                  <span>False Alert Suppression Ratio (95.1% Filtered)</span>
+                  <span class="score-bar-val">78 / 100</span>
+                </div>
+                <div class="score-bar-track">
+                  <div class="score-bar-fill amber" style="width: 78%;"></div>
+                </div>
+              </div>
+
+              <!-- Bar 4: Smart Deadbolt Compliance -->
+              <div class="score-bar-row">
+                <div class="score-bar-labels">
+                  <span>Smart Deadbolt & Night Auto-Lock Compliance</span>
+                  <span class="score-bar-val">98 / 100</span>
+                </div>
+                <div class="score-bar-track">
+                  <div class="score-bar-fill blue" style="width: 98%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scorecard-footer-actions">
+            <button type="button" class="btn-pill" onclick="switchTab('reports')">📋 View Full Security Audit →</button>
+            <button type="button" class="btn-pill" style="background:var(--threat-low);color:#fff;border-color:var(--threat-low);" onclick="showToast('Downloading SafeGuard Certified Insurance Certificate PDF ($120/yr savings applied)...', 'low')">📄 Download Insurance Certificate</button>
+          </div>
+        </section>
       </div>
 
       <!-- ===================================================================
