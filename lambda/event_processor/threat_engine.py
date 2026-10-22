@@ -70,7 +70,7 @@ class ThreatEngine:
             family_match = face_result
 
         # Label detection
-        detected_labels = self.rekognition.detect_labels(image_bytes=image_bytes, label_hint=label_hint)
+        detected_labels = self.rekognition.detect_labels(image_bytes=image_bytes, label_hint=label_hint, face_hint=face_hint)
         detected_objects = [item["name"] for item in detected_labels]
         if metadata.get("courier") or event_type == "package_detected":
             if "Package" not in detected_objects:

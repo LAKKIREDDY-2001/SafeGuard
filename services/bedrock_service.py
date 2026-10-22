@@ -193,7 +193,15 @@ class BedrockService:
             }
 
         # 4. Repeated Unknown Visitor (3rd visit) or Late Night Unknown Visitor
-        if not family_match or not family_match.get("matched"):
+        metadata = event_data.get("metadata", {}) or {}
+        is_person = (
+            "Person" in objects
+            or event_type == "person_detected"
+            or metadata.get("face_hint") is not None
+            or metadata.get("visitor_id") is not None
+        )
+
+        if is_person and (not family_match or not family_match.get("matched")):
             if visit_count >= 3 and is_night:
                 # Escalates to CRITICAL
                 return {
@@ -228,11 +236,11 @@ class BedrockService:
                     "recommended_action": t["action_monitor"]
                 }
 
-        # Default fallback
+        # Default fallback: Harmless motion (wind, foliage, pets, distant vehicles)
         return {
             "threat_level": "low",
-            "threat_score": 0.10,
+            "threat_score": 0.02,
             "category": "visitor",
-            "summary": "Motion detected. No security risk identified.",
+            "summary": "Harmless motion detected. Suppressed by SafeGuard Zero-False-Positive filter.",
             "recommended_action": t["action_safe"]
         }

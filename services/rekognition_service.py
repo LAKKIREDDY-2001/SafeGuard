@@ -89,7 +89,7 @@ class RekognitionService:
         except (ClientError, Exception):
             return {"matched": False, "confidence": 0.0}
 
-    def detect_labels(self, image_bytes: Optional[bytes] = None, label_hint: Optional[str] = None) -> List[Dict[str, Any]]:
+    def detect_labels(self, image_bytes: Optional[bytes] = None, label_hint: Optional[str] = None, face_hint: Optional[str] = None) -> List[Dict[str, Any]]:
         """
         Detect objects (e.g., Person, Package, Delivery Truck, Crowbar/Weapon, Pet).
         """
@@ -106,18 +106,26 @@ class RekognitionService:
                     {"name": "Crowbar", "confidence": 92.4, "category": "weapon_tool"},
                     {"name": "Ski Mask", "confidence": 91.0, "category": "disguise"}
                 ]
-            elif label_hint == "animal":
+            elif label_hint in ["animal", "cat", "pet"]:
                 return [
-                    {"name": "Raccoon", "confidence": 96.5, "category": "animal"}
+                    {"name": "Animal", "confidence": 96.5, "category": "animal"},
+                    {"name": "Cat", "confidence": 94.0, "category": "animal"}
+                ]
+            elif label_hint in ["foliage", "wind", "tree", "plant", "shadow"]:
+                return [
+                    {"name": "Tree", "confidence": 92.0, "category": "nature"},
+                    {"name": "Foliage", "confidence": 88.5, "category": "nature"}
                 ]
             elif label_hint == "vehicle":
                 return [
                     {"name": "Delivery Van", "confidence": 97.0, "category": "vehicle"}
                 ]
-            else:
+            elif label_hint == "person" or face_hint is not None:
                 return [
                     {"name": "Person", "confidence": 96.0, "category": "person"}
                 ]
+            else:
+                return []
 
         try:
             response = self.client.detect_labels(
