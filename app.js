@@ -1154,6 +1154,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const formLogin = document.getElementById('form-login');
   const formSignup = document.getElementById('form-signup');
 
+  // About Modal elements
+  const aboutModal = document.getElementById('about-modal');
+  const btnAboutClose = document.getElementById('btn-about-close');
+  const navItemAbout = document.getElementById('nav-item-about');
+  const btnDropdownAbout = document.getElementById('btn-dropdown-about');
+
   // Close all open dropdowns
   function closeAllDropdowns() {
     if (notifDropdown) notifDropdown.hidden = true;
@@ -1320,6 +1326,54 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // About SafeGuard Modal logic & Live Deployments
+  function openAboutModal() {
+    if (!aboutModal) return;
+    closeAllDropdowns();
+    aboutModal.hidden = false;
+    playAudioCue('click');
+    if (btnAboutClose) btnAboutClose.focus();
+  }
+
+  function closeAboutModal() {
+    if (!aboutModal) return;
+    aboutModal.hidden = true;
+    playAudioCue('click');
+  }
+
+  if (navItemAbout) {
+    navItemAbout.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAboutModal();
+    });
+    navItemAbout.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openAboutModal();
+      }
+    });
+  }
+
+  if (btnDropdownAbout) {
+    btnDropdownAbout.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openAboutModal();
+    });
+  }
+
+  if (btnAboutClose) {
+    btnAboutClose.addEventListener('click', closeAboutModal);
+  }
+
+  if (aboutModal) {
+    aboutModal.addEventListener('click', (e) => {
+      if (e.target === aboutModal) {
+        closeAboutModal();
+      }
+    });
+  }
+
 
   // One-Click Hackathon Demo Login
   if (btnDemoLogin) {
