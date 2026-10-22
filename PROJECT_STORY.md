@@ -5,7 +5,19 @@
 
 **Architect:** Venkata Madhava Reddy  
 **Hackathon:** Amazon Developer Hackathon 2026 | **Track:** Ring  
-**GitHub Repository:** [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)
+**GitHub Repository:** [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)  
+**Live Frontend Dashboard (GitHub Pages):** [https://LAKKIREDDY-2001.github.io/SafeGuard/](https://LAKKIREDDY-2001.github.io/SafeGuard/)  
+**Live Full-Stack Cloud Deployment (Render):** [https://safeguard.onrender.com](https://safeguard.onrender.com)  
+
+---
+
+## ⚡ Try It Out — Live Deployments
+* 🌐 **Interactive Web Dashboard (GitHub Pages):** [https://LAKKIREDDY-2001.github.io/SafeGuard/](https://LAKKIREDDY-2001.github.io/SafeGuard/)
+* ⚡ **Full-Stack Cloud Web Service & REST API (Render.com):** [https://safeguard.onrender.com](https://safeguard.onrender.com)
+  * System Health Endpoint: [https://safeguard.onrender.com/health](https://safeguard.onrender.com/health)
+  * Aggregated Dashboard REST API: [https://safeguard.onrender.com/api/dashboard](https://safeguard.onrender.com/api/dashboard)
+* 📦 **Public Source Code (GitHub):** [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)
+* 📝 **10-Point Developer Friction Log (+10% Bonus):** [https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md](https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md)
 
 ---
 
@@ -150,10 +162,14 @@ SafeGuard is built on a serverless, event-driven AWS architecture:
 
 ---
 
-## 🔗 Project Links
+## 🔗 Project Links ("Try It Out")
 
-* **Live Web Dashboard (GitHub Pages)**: [https://LAKKIREDDY-2001.github.io/SafeGuard/](https://LAKKIREDDY-2001.github.io/SafeGuard/)
-* **GitHub Repository**: [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)
-* **Developer Friction Log (+10% Bonus)**: [https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md](https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md)
-* **Project Story (Markdown)**: [https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/PROJECT_STORY.md](https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/PROJECT_STORY.md)
-* **Live Architecture & Walkthrough**: [https://github.com/LAKKIREDDY-2001/SafeGuard#readme](https://github.com/LAKKIREDDY-2001/SafeGuard#readme)
+* 🌐 **Live Interactive Web Dashboard (GitHub Pages)**: [https://LAKKIREDDY-2001.github.io/SafeGuard/](https://LAKKIREDDY-2001.github.io/SafeGuard/)
+* ⚡ **Live Full-Stack Cloud Deployment (Render.com)**: [https://safeguard.onrender.com](https://safeguard.onrender.com)
+  * Live Health Check Endpoint: [https://safeguard.onrender.com/health](https://safeguard.onrender.com/health)
+  * Live Dashboard REST API: [https://safeguard.onrender.com/api/dashboard](https://safeguard.onrender.com/api/dashboard)
+* 📦 **GitHub Source Repository**: [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)
+* 📝 **Developer Friction Log (+10% Bonus)**: [https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md](https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md)
+* 📖 **Project Story (Markdown)**: [https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/PROJECT_STORY.md](https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/PROJECT_STORY.md)
+* 🏗️ **Live Architecture & Walkthrough**: [https://github.com/LAKKIREDDY-2001/SafeGuard#readme](https://github.com/LAKKIREDDY-2001/SafeGuard#readme)
+

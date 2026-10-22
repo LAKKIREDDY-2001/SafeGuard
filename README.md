@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/LAKKIREDDY-2001/SafeGuard/actions"><img src="https://img.shields.io/badge/tests-15%2F15%20passing-brightgreen?style=flat-square&logo=pytest" alt="Tests"></a>
+  <a href="https://github.com/LAKKIREDDY-2001/SafeGuard/actions"><img src="https://img.shields.io/badge/tests-20%2F20%20passing-brightgreen?style=flat-square&logo=pytest" alt="Tests"></a>
   <a href="https://github.com/LAKKIREDDY-2001/SafeGuard"><img src="https://img.shields.io/badge/coverage-82%25%20verified-brightgreen?style=flat-square&logo=codecov" alt="Coverage"></a>
   <a href="https://aws.amazon.com/bedrock/"><img src="https://img.shields.io/badge/Amazon%20Bedrock-Claude%203%20Haiku-blueviolet?style=flat-square&logo=amazonaws" alt="Amazon Bedrock"></a>
   <a href="https://aws.amazon.com/rekognition/"><img src="https://img.shields.io/badge/Amazon%20Rekognition-Dual%20AI%20Vision-blue?style=flat-square&logo=amazonaws" alt="Amazon Rekognition"></a>
@@ -23,13 +23,15 @@
   <a href="docs/ACCESSIBILITY.md"><img src="https://img.shields.io/badge/accessibility-WCAG%202.1%20AAA-success?style=flat-square" alt="WCAG AAA"></a>
   <a href="FRICTION_LOG.md"><img src="https://img.shields.io/badge/Developer%20Friction%20Log-%2B10%25%20Bonus%20Eligible-gold?style=flat-square" alt="Friction Log"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square" alt="License"></a>
-  <a href="https://LAKKIREDDY-2001.github.io/SafeGuard/"><img src="https://img.shields.io/badge/Live%20Dashboard-GitHub%20Pages-success?style=flat-square&logo=github" alt="Live Demo"></a>
+  <a href="https://LAKKIREDDY-2001.github.io/SafeGuard/"><img src="https://img.shields.io/badge/Live%20Frontend-GitHub%20Pages-success?style=flat-square&logo=github" alt="GitHub Pages"></a>
+  <a href="https://safeguard.onrender.com"><img src="https://img.shields.io/badge/Live%20Backend-Render.com-46E3B7?style=flat-square&logo=render" alt="Render"></a>
 </p>
 
 ---
 
 ## ⚡ Quick Links for Hackathon Judges
 * 🌐 **Live Interactive Dashboard (GitHub Pages):** [https://LAKKIREDDY-2001.github.io/SafeGuard/](https://LAKKIREDDY-2001.github.io/SafeGuard/)
+* ⚡ **Live Full-Stack Cloud Deployment (Render.com):** [https://safeguard.onrender.com](https://safeguard.onrender.com) *(API Health: [/health](https://safeguard.onrender.com/health) • REST API: [/api/dashboard](https://safeguard.onrender.com/api/dashboard))*
 * 📦 **Public GitHub Repository:** [https://github.com/LAKKIREDDY-2001/SafeGuard](https://github.com/LAKKIREDDY-2001/SafeGuard)
 * 📝 **10-Point Developer Friction Log (+10% Bonus):** [FRICTION_LOG.md](FRICTION_LOG.md)
 * ♿ **Multi-Modal Accessibility Guide (WCAG AAA):** [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md)

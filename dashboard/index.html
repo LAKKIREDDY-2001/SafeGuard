@@ -40,6 +40,9 @@
       <a class="nav-item" data-tab="settings">
         <span class="icon">⚙️</span> <span class="nav-item-text">Settings</span>
       </a>
+      <a class="nav-item" id="nav-item-about" role="button" tabindex="0" title="About SafeGuard & Live Deployments">
+        <span class="icon">ℹ️</span> <span class="nav-item-text">About & Links</span>
+      </a>
 
       <div class="sidebar-footer">
         <div class="sidebar-ai-badge" title="Amazon Bedrock Claude 3 Haiku Engine Active">
@@ -247,6 +250,13 @@
                 <div class="acc-menu-info">
                   <strong>Alexa Voice Integration</strong>
                   <small>Echo Show announcements & Guard</small>
+                </div>
+              </button>
+              <button class="acc-menu-item" type="button" id="btn-dropdown-about">
+                <span class="acc-menu-icon">ℹ️</span>
+                <div class="acc-menu-info">
+                  <strong>About SafeGuard & Live Links</strong>
+                  <small>Render Cloud API & GitHub Pages</small>
                 </div>
               </button>
             </div>
@@ -1398,6 +1408,83 @@
       </div>
     </div>
   </div>
+
+  <!-- About SafeGuard & Live Deployments Modal -->
+  <div id="about-modal" class="auth-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
+    <div class="auth-card about-card">
+      <button class="auth-close-btn" id="btn-about-close" aria-label="Close modal" type="button">✕</button>
+
+      <div class="auth-header">
+        <img src="assets/logo.svg" alt="SafeGuard" class="auth-brand-logo">
+        <h2 id="about-modal-title" class="auth-title">About SafeGuard AI</h2>
+        <p class="auth-subtitle">Amazon Developer Hackathon 2026 • Ring Track & AWS Builder Challenge</p>
+      </div>
+
+      <div class="about-modal-body">
+        <p class="about-mission-text">
+          <strong>SafeGuard</strong> transforms raw Ring camera motion alerts into contextual threat intelligence, automated perimeter deadbolt security, and proactive family wellness monitoring powered by <strong>Amazon Bedrock (Claude 3 Haiku)</strong> and <strong>Amazon Rekognition</strong>.
+        </p>
+
+        <h3 class="about-section-heading">🌐 Live Deployments & Try It Out</h3>
+        <div class="about-deploy-links">
+          <a href="https://LAKKIREDDY-2001.github.io/SafeGuard/" target="_blank" rel="noopener noreferrer" class="about-link-card">
+            <div class="about-link-icon">🌐</div>
+            <div class="about-link-details">
+              <strong>GitHub Pages (Interactive Web Dashboard)</strong>
+              <span>https://LAKKIREDDY-2001.github.io/SafeGuard/</span>
+              <small class="about-link-tag">Static Demo • 12 Camera Feeds • Sounds & Smart Deadbolts</small>
+            </div>
+            <span class="about-link-arrow">↗</span>
+          </a>
+
+          <a href="https://safeguard.onrender.com" target="_blank" rel="noopener noreferrer" class="about-link-card">
+            <div class="about-link-icon">⚡</div>
+            <div class="about-link-details">
+              <strong>Render.com (Full-Stack Cloud Web Service)</strong>
+              <span>https://safeguard.onrender.com</span>
+              <small class="about-link-tag">Gunicorn WSGI • Python 3.11 Backend • Live REST API</small>
+            </div>
+            <span class="about-link-arrow">↗</span>
+          </a>
+
+          <a href="https://github.com/LAKKIREDDY-2001/SafeGuard" target="_blank" rel="noopener noreferrer" class="about-link-card">
+            <div class="about-link-icon">📦</div>
+            <div class="about-link-details">
+              <strong>GitHub Public Repository</strong>
+              <span>https://github.com/LAKKIREDDY-2001/SafeGuard</span>
+              <small class="about-link-tag">Apache 2.0 License • 20/20 Passing PyTest Tests</small>
+            </div>
+            <span class="about-link-arrow">↗</span>
+          </a>
+
+          <a href="https://github.com/LAKKIREDDY-2001/SafeGuard/blob/main/FRICTION_LOG.md" target="_blank" rel="noopener noreferrer" class="about-link-card">
+            <div class="about-link-icon">📝</div>
+            <div class="about-link-details">
+              <strong>Developer Friction Log (+10% Bonus)</strong>
+              <span>10 Detailed Developer Friction Points (Friction Log #1 to #10)</span>
+              <small class="about-link-tag">AWS Rekognition • Ring Webhooks • Bedrock Latency Solutions</small>
+            </div>
+            <span class="about-link-arrow">↗</span>
+          </a>
+        </div>
+
+        <h3 class="about-section-heading" style="margin-top: 14px;">🏆 Core Architectural Highlights</h3>
+        <ul class="about-tech-list">
+          <li><strong>Amazon Bedrock (Claude 3 Haiku)</strong>: Sub-1.2s contextual threat classification & proactive actions.</li>
+          <li><strong>Amazon Rekognition</strong>: Facial geometry family verification & unknown visitor tracking.</li>
+          <li><strong>Alexa Voice Service & Skills Kit</strong>: Echo Show visual alerts & two-way intercom audio.</li>
+          <li><strong>AWS Serverless Stack</strong>: Lambda (Python 3.11), DynamoDB, SNS SMS/APNs dispatch.</li>
+          <li><strong>Smart Deadbolts & Acoustic Simulation</strong>: Real-time motor sound + multi-door master lock.</li>
+          <li><strong>Insurance Scorecard (87/100)</strong>: Certified compliance saving homeowners $120/year.</li>
+        </ul>
+      </div>
+
+      <div class="auth-modal-footer">
+        <span>Architect: <strong>Venkata Madhava Reddy</strong> • Amazon Developer Hackathon 2026</span>
+      </div>
+    </div>
+  </div>
+
 
   <!-- =========================================================================
        MODAL 1: HIGH-DEFINITION AI CAMERA STREAM & TIMELINE VIDEO PLAYER
